@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>4to Año – PORTAL DE HISTORIA</title>
+<style>
+  html, body { margin: 0; height: 100%; background: #002060; }
+  :root { --bar: 76px; --app: clamp(96px, 9vw, 140px); --alto: min(56.25vw, calc(100vh - var(--bar))); --app-top: calc(var(--bar) + (100vh - var(--bar) - var(--alto)) / 2 + var(--alto) * 0.5014 - var(--app) / 2 - var(--alto) * 0.29); }
+  * { box-sizing: border-box; }
+  body { display: flex; align-items: center; justify-content: center; overflow: hidden; padding-top: var(--bar); }
+  .botonera {
+    width: min(100vw, calc((100vh - var(--bar)) * 16 / 9));
+    aspect-ratio: 16 / 9;
+    background: url("botenera-de-4to-a%C3%B1o-de-historia.png") center / 100% 100% no-repeat;
+  }
+  .botonera { position: relative; }
+  .b { position: absolute; left: 4.06%; width: 92.97%; display: block; }
+  a.b:hover, a.b:focus-visible { background-color: rgba(255,255,255,.2); outline: none; }
+  .nav {
+    position: fixed; top: max(12px, env(safe-area-inset-top)); z-index: 10;
+    width: 56px; height: 56px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    background: #001540; border: 2px solid rgba(255,255,255,.85);
+    transition: background .2s ease, transform .2s ease;
+  }
+  .nav:hover, .nav:focus-visible { background: #0a2f7a; transform: scale(1.08); outline: none; }
+  .nav svg { width: 30px; height: 30px; stroke: #fff; fill: none; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
+  .nav-izq { left: max(12px, env(safe-area-inset-left)); }
+  .nav-der { right: max(12px, env(safe-area-inset-right)); }
+  .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+  .leyenda-anio {
+    position: fixed; top: max(12px, env(safe-area-inset-top)); left: 84px; right: 84px; height: 56px; z-index: 9;
+    display: flex; align-items: center; justify-content: center; text-align: center;
+    color: #fff; font-family: Georgia, "Times New Roman", serif; font-weight: 700;
+    font-size: clamp(0.85rem, 2.6vw, 1.7rem); letter-spacing: .04em; line-height: 1.1; pointer-events: none;
+  }
+  .btn-app {
+    position: fixed; right: max(48px, 4vw, env(safe-area-inset-right)); z-index: 11;
+    top: var(--app-top);
+    width: var(--app); aspect-ratio: 1 / 1;
+    display: flex; align-items: center; justify-content: center; text-align: center;
+    background: #f28c28; color: #111; border: 3px solid rgba(255,255,255,.9); border-radius: 12px;
+    box-shadow: 0 6px 16px rgba(0,0,0,.45);
+    font-family: Arial, Helvetica, sans-serif; font-weight: 800; line-height: 1.15;
+    font-size: clamp(0.85rem, 1.15vw, 1.15rem); padding: 8px; text-decoration: none; cursor: pointer;
+    transition: transform .2s ease, background .2s ease;
+  }
+  .btn-fuentes { top: calc(var(--app-top) + var(--app) + 12px); background: #b5c46b; }
+  .btn-app:hover, .btn-app:focus-visible { background: #ff9d3d; transform: scale(1.06); outline: none; }
+  .btn-fuentes:hover, .btn-fuentes:focus-visible { background: #c4d27c; }
+  .btn-cronograma { top: calc(var(--app-top) + (var(--app) + 12px) * 2); background: #f5e6a3; }
+  .btn-cronograma:hover, .btn-cronograma:focus-visible { background: #ecd985; }
+  .btn-placeholder { cursor: default; }
+</style>
+</head>
+<body>
+  <a class="nav nav-izq" href="../index.html" aria-label="Volver atrás" title="Volver atrás">
+    <svg viewBox="0 0 24 24"><path d="M19 12H5"/><path d="M11 6l-6 6 6 6"/></svg>
+  </a>
+  <a class="nav nav-der" href="../index.html" aria-label="Ir a página de inicio" title="Ir a página de inicio">
+    <svg viewBox="0 0 24 24"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h5v-6h4v6h5V10"/></svg>
+  </a>
+  <div class="leyenda-anio">CURSO DE CUARTO AÑO DE HISTORIA</div>
+  <a class="btn-app" target="_blank" rel="noopener" href="LINEAMIENTOS%20Y%20CRONOGRAMA%20DEL%20TRABAJO%20FINAL.pdf" aria-label="Lineamientos y cronograma del trabajo final">Lineamientos y cronograma del trabajo final</a>
+  <a class="btn-app btn-fuentes" target="_blank" rel="noopener" href="fuentes-unidad-4.html" aria-label="Bloques de fuentes de la Unidad 4">Bloques de fuentes de la Unidad 4</a>
+  <main class="botonera">
+    <h1 class="sr">4to Año – Historia</h1>
+    <a class="b" target="_blank" rel="noopener" style="top:7.36%;height:10.00%" href="manual-cuarto-a%C3%B1o.pdf" aria-label="MANUAL DE HISTORIA DE CUARTO AÑO"></a>
+    <a class="b" target="_blank" rel="noopener" style="top:19.58%;height:10.00%" href="linea-vocabulario-mapa.html" aria-label="LÍNEA DE TIEMPO // VOCABULARIO // MAPA Y RED CONCEPTUALES"></a>
+    <a class="b" target="_blank" rel="noopener" style="top:32.78%;height:10.00%" href="PROGRAMA_HISTORIA_CUARTO_A%C3%91O.pdf" aria-label="PROGRAMA DE LA MATERIA"></a>
+    <a class="b" target="_blank" rel="noopener" style="top:45.14%;height:10.00%" href="PLANIFICACION_DOCENTE_ANUAL_HISTORIA_CUARTO_A%C3%91O.pdf" aria-label="PLANIFICACIÓN ANUAL"></a>
+    <a class="b" target="_blank" rel="noopener" style="top:57.08%;height:10.42%" href="CRONOGRAMA_HISTORIA_CUARTO_A%C3%91O.pdf" aria-label="CRONOGRAMA DE CLASES"></a>
+    <a class="b" target="_blank" rel="noopener" style="top:69.86%;height:10.97%" href="PLANILLA_DE_SEGUIMIENTO_DE_APRENDIZAJES_HISTORIA_CUARTO_A%C3%91O.pdf" aria-label="PLANILLA DE SEGUIMIENTO DE APRENDIZAJES"></a>
+    <a class="b" target="_blank" rel="noopener" style="top:83.47%;height:10.00%" href="RUBRICAS_HISTORIA_CUARTO_A%C3%91O.pdf" aria-label="RÚBRICAS"></a>
+  </main>
+</body>
+</html>
