@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>2do Año – PORTAL DE HISTORIA</title>
+<style>
+  html, body { margin: 0; height: 100%; background: #002060; }
+  :root { --bar: 76px; --app: clamp(96px, 9vw, 140px); }
+  * { box-sizing: border-box; }
+  body { display: flex; align-items: center; justify-content: center; overflow: hidden; padding-top: var(--bar); }
+  .botonera {
+    width: min(100vw, calc((100vh - var(--bar)) * 16 / 9));
+    aspect-ratio: 16 / 9;
+    background: url("botenera-de-2do-a%C3%B1o-de-historia.png") center / 100% 100% no-repeat;
+  }
+  .botonera { position: relative; }
+  .b { position: absolute; left: 4.06%; width: 92.97%; display: block; }
+  a.b:hover, a.b:focus-visible { background-color: rgba(255,255,255,.2); outline: none; }
+  .nav {
+    position: fixed; top: max(12px, env(safe-area-inset-top)); z-index: 10;
+    width: 56px; height: 56px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    background: #001540; border: 2px solid rgba(255,255,255,.85);
+    transition: background .2s ease, transform .2s ease;
+  }
+  .nav:hover, .nav:focus-visible { background: #0a2f7a; transform: scale(1.08); outline: none; }
+  .nav svg { width: 30px; height: 30px; stroke: #fff; fill: none; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
+  .nav-izq { left: max(12px, env(safe-area-inset-left)); }
+  .nav-der { right: max(12px, env(safe-area-inset-right)); }
+  .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+  .leyenda-anio {
+    position: fixed; top: max(12px, env(safe-area-inset-top)); left: 84px; right: 84px; height: 56px; z-index: 9;
+    display: flex; align-items: center; justify-content: center; text-align: center;
+    color: #fff; font-family: Georgia, "Times New Roman", serif; font-weight: 700;
+    font-size: clamp(0.85rem, 2.6vw, 1.7rem); letter-spacing: .04em; line-height: 1.1; pointer-events: none;
+  }
+  .btn-app {
+    position: fixed; left: max(48px, 4vw, env(safe-area-inset-left)); z-index: 11;
+    top: calc(var(--bar) + (100vh - var(--bar)) / 2 - var(--app) - 12px);
+    width: var(--app); aspect-ratio: 1 / 1; display: flex; align-items: center; justify-content: center;
+    text-align: center; padding: 8px; text-decoration: none; background: #a9d6f5; color: #111;
+    border: 3px solid rgba(255,255,255,.9); border-radius: 12px; font-weight: 800;
+    font-size: clamp(0.85rem, 1.15vw, 1.15rem); line-height: 1.15; box-shadow: 0 4px 12px rgba(0,0,0,.35);
+    transition: background .2s ease, transform .2s ease;
+  }
+  .btn-app:hover, .btn-app:focus-visible { background: #bfe3fa; transform: scale(1.05); outline: none; }
+  .btn-fuentes3 { top: calc(var(--bar) + (100vh - var(--bar)) / 2); background: #cfc3ee; }
+  .btn-fuentes3:hover, .btn-fuentes3:focus-visible { background: #dcd2f5; }
+  .btn-der { left: auto; right: max(48px, 4vw, env(safe-area-inset-right)); }
+  .btn-fuentes5 { top: calc(var(--bar) + (100vh - var(--bar)) / 2); background: #f7c6d9; }
+  .btn-fuentes5:hover, .btn-fuentes5:focus-visible { background: #fbd7e4; }
+</style>
+</head>
+<body>
+  <a class="nav nav-izq" href="../index.html" aria-label="Volver atrás" title="Volver atrás">
+    <svg viewBox="0 0 24 24"><path d="M19 12H5"/><path d="M11 6l-6 6 6 6"/></svg>
+  </a>
+  <a class="nav nav-der" href="../index.html" aria-label="Ir a página de inicio" title="Ir a página de inicio">
+    <svg viewBox="0 0 24 24"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h5v-6h4v6h5V10"/></svg>
+  </a>
+  <div class="leyenda-anio">CURSO DE SEGUNDO AÑO DE HISTORIA</div>
+  <a class="btn-app" target="_blank" rel="noopener" href="APP%20-%20UNIDAD%203/APP%20-%20HISTORIA%20DE%20SEGUNDO%20A%C3%91O%20-%20UNIDAD%203.pdf" aria-label="APP de la Unidad 3">APP de la Unidad 3</a>
+  <a class="btn-app btn-fuentes3" target="_blank" rel="noopener" href="fuentes-unidad-3.html" aria-label="Fuentes de la Unidad 3">Fuentes de la Unidad 3</a>
+  <a class="btn-app btn-der" target="_blank" rel="noopener" href="APP%20-%20UNIDAD%205/APP%20-%20HISTORIA%20DE%20SEGUNDO%20A%C3%91O%20-%20UNIDAD%205.pdf" aria-label="APP de la Unidad 5">APP de la Unidad 5</a>
+  <a class="btn-app btn-der btn-fuentes5" target="_blank" rel="noopener" href="fuentes-unidad-5.html" aria-label="Fuentes de la Unidad 5">Fuentes de la Unidad 5</a>
+  <main class="botonera">
+    <h1 class="sr">2do Año – Historia</h1>
+    <a class="b" target="_blank" rel="noopener" style="top:7.36%;height:10.00%" href="manual-segundo-a%C3%B1o.pdf" aria-label="MANUAL DE HISTORIA DE SEGUNDO AÑO"></a>
+    <a class="b" target="_blank" rel="noopener" style="top:19.58%;height:10.00%" href="linea-vocabulario-mapa.html" aria-label="LÍNEA DE TIEMPO // VOCABULARIO // MAPA Y RED CONCEPTUALES"></a>
+    <a class="b" target="_blank" rel="noopener" style="top:32.78%;height:10.00%" href="PROGRAMA_ANUAL_DE_HISTORIA_SEGUNDO_A%C3%91O.pdf" aria-label="PROGRAMA DE LA MATERIA"></a>
+    <a class="b" target="_blank" rel="noopener" style="top:45.14%;height:10.00%" href="PLANIFICACION_ANUAL_HISTORIA_SEGUNDO_A%C3%91O.pdf" aria-label="PLANIFICACIÓN ANUAL"></a>
+    <a class="b" target="_blank" rel="noopener" style="top:57.08%;height:10.42%" href="CRONOGRAMA_HISTORIA_SEGUNDO_A%C3%91O.pdf" aria-label="CRONOGRAMA DE CLASES"></a>
+    <a class="b" target="_blank" rel="noopener" style="top:69.86%;height:10.97%" href="PLANILLA_DE_SEGUIMIENTO_DE_APRENDIZAJES_HISTORIA_SEGUNDO_A%C3%91O.pdf" aria-label="PLANILLA DE SEGUIMIENTO DE APRENDIZAJES"></a>
+    <a class="b" target="_blank" rel="noopener" style="top:83.47%;height:10.00%" href="RUBRICAS_NO_NUMERICAS_Y_NUMERICAS_HISTORIA_SEGUNDO_A%C3%91O.pdf" aria-label="RÚBRICAS"></a>
+  </main>
+</body>
+</html>

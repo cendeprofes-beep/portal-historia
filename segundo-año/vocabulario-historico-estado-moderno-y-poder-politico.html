@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Estado moderno y poder político – Vocabulario de la Edad Moderna</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background-color: #0a0800;
+      background-image: url('imagenes/mapa-mundo.png');
+      background-size: cover;
+      background-position: center center;
+      background-repeat: no-repeat;
+      background-attachment: fixed;
+      color: white;
+      font-family: 'Georgia', serif;
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background: rgba(5, 3, 0, 0.84);
+      z-index: 0;
+    }
+
+    .pagina {
+      position: relative;
+      z-index: 1;
+      max-width: 860px;
+      margin: 0 auto;
+    }
+
+    /* ── BARRA SUPERIOR ── */
+    .barra-superior {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 0 24px;
+      gap: 10px;
+    }
+
+    .nav-btn {
+      color: #c9a84c;
+      text-decoration: none;
+      background-color: rgba(0,0,0,0.6);
+      border: 1px solid rgba(201,168,76,0.4);
+      padding: 8px 16px;
+      border-radius: 6px;
+      font-size: 0.85rem;
+      transition: 0.2s;
+      font-family: 'Georgia', serif;
+    }
+
+    .nav-btn:hover {
+      background-color: rgba(201,168,76,0.15);
+      border-color: #c9a84c;
+    }
+
+    /* ── ENCABEZADO ── */
+    .encabezado {
+      text-align: center;
+      margin-bottom: 36px;
+    }
+
+    .encabezado h1 {
+      font-size: 2rem;
+      color: #c9a84c;
+      text-shadow: 0 0 20px rgba(201,168,76,0.4), 2px 2px 6px black;
+      margin-bottom: 10px;
+      letter-spacing: 1px;
+    }
+
+    .encabezado p {
+      color: #bbb;
+      font-style: italic;
+      font-size: 0.92rem;
+      line-height: 1.6;
+    }
+
+    /* ── ACORDEÓN ── */
+    .acordeon {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-bottom: 50px;
+    }
+
+    /* Cabecera del tema */
+    .tema-cabecera {
+      width: 100%;
+      background: rgba(6, 4, 0, 0.85);
+      border: 1.5px solid rgba(201,168,76,0.45);
+      border-radius: 10px;
+      padding: 16px 22px;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: all 0.22s ease;
+      text-align: left;
+      color: white;
+      font-family: 'Georgia', serif;
+    }
+
+    .tema-cabecera:hover {
+      background: rgba(20, 14, 0, 0.9);
+      border-color: #c9a84c;
+      box-shadow: 0 0 16px rgba(201,168,76,0.2);
+    }
+
+    .tema-cabecera.activo {
+      border-color: #c9a84c;
+      border-bottom-left-radius: 0;
+      border-bottom-right-radius: 0;
+      background: rgba(30, 20, 0, 0.92);
+      box-shadow: 0 0 20px rgba(201,168,76,0.2);
+    }
+
+    .tema-label {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .tema-icono {
+      font-size: 1.4rem;
+      line-height: 1;
+    }
+
+    .tema-nombre {
+      font-size: 1.05rem;
+      font-weight: bold;
+      color: #c9a84c;
+      letter-spacing: 0.3px;
+    }
+
+    .tema-cantidad {
+      font-size: 0.72rem;
+      color: #888;
+      font-style: italic;
+      margin-top: 2px;
+    }
+
+    .tema-flecha {
+      color: #c9a84c;
+      font-size: 1.1rem;
+      transition: transform 0.3s ease;
+      flex-shrink: 0;
+    }
+
+    .tema-cabecera.activo .tema-flecha {
+      transform: rotate(180deg);
+    }
+
+    /* Panel desplegable */
+    .tema-panel {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.45s ease;
+      background: rgba(4, 3, 0, 0.88);
+      border: 1.5px solid #c9a84c;
+      border-top: none;
+      border-bottom-left-radius: 10px;
+      border-bottom-right-radius: 10px;
+    }
+
+    .tema-panel.abierto {
+      max-height: 9999px;
+    }
+
+    /* Lista de palabras */
+    .lista-palabras {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      padding: 20px 22px 24px;
+    }
+
+    .palabra {
+      background: rgba(255,255,255,0.05);
+      border-left: 4px solid #c9a84c;
+      padding: 10px 14px;
+      border-radius: 0 8px 8px 0;
+      transition: background 0.2s;
+    }
+
+    .palabra:hover {
+      background: rgba(201,168,76,0.08);
+    }
+
+    .termino {
+      font-weight: bold;
+      color: #c9a84c;
+      font-size: 1.35rem;
+      font-family: 'Georgia', serif;
+    }
+
+    .definicion {
+      margin-top: 5px;
+      color: #e8e8e8;
+      font-size: 1.15rem;
+      line-height: 1.7;
+      font-family: Georgia, serif;
+    }
+
+    /* ── FIRMA ── */
+    .firma {
+      text-align: center;
+      margin-top: 10px;
+      padding-top: 20px;
+      border-top: 1px solid rgba(201,168,76,0.2);
+      font-size: 1.78rem;
+      color: #777;
+      font-style: italic;
+      margin-bottom: 30px;
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 640px) {
+      .encabezado h1 { font-size: 1.5rem; }
+      .tema-nombre { font-size: 0.92rem; }
+      .tema-cabecera { padding: 13px 16px; }
+      .lista-palabras { padding: 16px 16px 20px; }
+      .termino { font-size: 1.2rem; }
+      .definicion { font-size: 1rem; }
+    }
+
+    /* ── BOTÓN FIJO PÁGINA PRINCIPAL ── */
+    .btn-home-fijo {
+      position: fixed;
+      top: 14px;
+      right: 18px;
+      z-index: 999;
+      background: rgba(6,4,0,0.88);
+      color: var(--gold);
+      text-decoration: none;
+      font-family: 'Georgia', serif;
+      font-size: 0.82rem;
+      font-weight: bold;
+      padding: 7px 14px;
+      border-radius: 20px;
+      border: 1px solid rgba(201,168,76,0.5);
+      box-shadow: 0 2px 10px rgba(0,0,0,0.5);
+      transition: background 0.2s, border-color 0.2s;
+      white-space: nowrap;
+    }
+    .btn-home-fijo:hover {
+      background: rgba(201,168,76,0.18);
+      border-color: var(--gold);
+    }
+
+    /* ── FIRMA INSTITUCIONAL ── */
+    .firma-institucional {
+      text-align: center;
+      padding: 14px 20px 10px;
+      position: relative;
+      z-index: 2;
+      background: rgba(6,4,0,0.75);
+      border-bottom: 1px solid rgba(201,168,76,0.25);
+    }
+    .firma-institucional p {
+      font-family: 'IM Fell English', serif;
+      font-size: 1.05rem;
+      font-style: italic;
+      color: #c9a84c;
+      text-shadow: 0 0 18px rgba(201,168,76,0.55), 0 1px 4px rgba(0,0,0,0.8);
+      letter-spacing: 0.03em;
+      margin: 0;
+    }
+    .firma-institucional .autor-nombre {
+      font-size: 1.5rem;
+      font-style: italic;
+      color: #c9a84c;
+      text-shadow: 0 0 22px rgba(201,168,76,0.6), 0 1px 4px rgba(0,0,0,0.9);
+      letter-spacing: 0.02em;
+    }
+  
+    :root { --gold: #c9a84c; }
+    /* Botones de tema (páginas índice) */
+    a.tema-boton { text-decoration: none; }
+    a.tema-boton .tema-flecha { transform: none; }
+    a.tema-boton:hover .tema-flecha { transform: translateX(4px); }
+    /* Panel de términos siempre visible */
+    .panel-terminos {
+      background: rgba(4, 3, 0, 0.88);
+      border: 1.5px solid #c9a84c;
+      border-radius: 10px;
+      margin-bottom: 50px;
+    }
+    .encabezado .tema-icono-grande { display: block; font-size: 2.6rem; margin-bottom: 6px; }
+  </style>
+</head>
+<body>
+
+<div class="firma-institucional">
+  <p>Historia de 2.° año del Nivel Secundario · <span class="autor-nombre">Prof. Claudio Damián Sacco</span></p>
+</div>
+
+<div class="pagina">
+
+  <div class="barra-superior">
+    <a href="vocabulario-historico.html" class="nav-btn">← Volver al índice</a>
+    <a href="../index.html" class="nav-btn">Página Principal</a>
+  </div>
+
+  <div class="encabezado">
+    <span class="tema-icono-grande">👑</span>
+    <h1>Estado moderno y poder político</h1>
+    <p>20 términos, ordenados alfabéticamente.</p>
+  </div>
+
+  <div class="panel-terminos">
+    <div class="lista-palabras">
+<div class="palabra"><span class="termino">absolutismo</span><div class="definicion">Sistema político en que el rey concentra todo el poder sin límites legales. Luis XIV de Francia fue su máximo exponente.</div></div>
+<div class="palabra"><span class="termino">Antiguo Régimen</span><div class="definicion">Sistema político y social que existió en Europa antes de las revoluciones del siglo XVIII, basado en la monarquía absoluta, los privilegios de la nobleza y el poder de la Iglesia.</div></div>
+<div class="palabra"><span class="termino">burocracia</span><div class="definicion">Conjunto de funcionarios pagados por el Estado para administrar el territorio. Su desarrollo fue clave para la construcción del Estado moderno.</div></div>
+<div class="palabra"><span class="termino">centralización</span><div class="definicion">Proceso por el cual el poder se concentra en el Estado central, eliminando o reduciendo los poderes locales de nobles, iglesias y ciudades.</div></div>
+<div class="palabra"><span class="termino">Código Napoleónico</span><div class="definicion">Conjunto de leyes civiles creado por Napoleón Bonaparte en 1804, que unificó el derecho francés y se extendió a gran parte de Europa y América.</div></div>
+<div class="palabra"><span class="termino">derecho divino de los reyes</span><div class="definicion">Doctrina que sostenía que el rey recibía su autoridad directamente de Dios y por lo tanto no debía rendir cuentas a nadie más que a Él.</div></div>
+<div class="palabra"><span class="termino">diplomacia</span><div class="definicion">Arte de negociar entre Estados para resolver conflictos sin recurrir a la guerra, o para formar alianzas antes de ella.</div></div>
+<div class="palabra"><span class="termino">división de poderes</span><div class="definicion">Principio de que el poder del Estado debe dividirse en tres funciones independientes: legislar, gobernar y juzgar, para evitar el abuso.</div></div>
+<div class="palabra"><span class="termino">Estado nacional</span><div class="definicion">Organización política que controla un territorio definido con fronteras claras, una población, leyes propias y un gobierno que ejerce el monopolio de la fuerza.</div></div>
+<div class="palabra"><span class="termino">feudalismo</span><div class="definicion">Sistema político y económico medieval basado en la relación entre señores y vasallos, el dominio de la tierra y la ausencia de un Estado centralizado. La Edad Moderna fue el proceso de su destrucción.</div></div>
+<div class="palabra"><span class="termino">golpe de Estado</span><div class="definicion">Toma del poder por la fuerza, generalmente por parte del ejército o de una facción política, sin respetar los procedimientos legales.</div></div>
+<div class="palabra"><span class="termino">impuesto</span><div class="definicion">Pago obligatorio que los ciudadanos hacen al Estado para financiar sus funciones. El control de los impuestos fue uno de los grandes conflictos entre reyes y parlamentos.</div></div>
+<div class="palabra"><span class="termino">legitimidad</span><div class="definicion">Fundamento que justifica el poder de un gobernante. Puede ser divina (Dios lo eligió), hereditaria (su familia siempre gobernó) o popular (el pueblo lo eligió).</div></div>
+<div class="palabra"><span class="termino">monarquía absoluta</span><div class="definicion">Sistema en que el rey gobierna sin limitaciones legales ni institucionales. Diferente de la tiranía porque el rey absoluto sí respeta las leyes divinas y naturales, al menos en teoría.</div></div>
+<div class="palabra"><span class="termino">nobleza</span><div class="definicion">Clase social privilegiada por herencia, con derechos especiales en materia fiscal, judicial y política. Su poder fue reduciéndose con el avance del Estado moderno.</div></div>
+<div class="palabra"><span class="termino">pacto colonial</span><div class="definicion">Sistema económico que obligaba a las colonias a comerciar exclusivamente con la metrópoli y a proveerla de materias primas a cambio de productos manufacturados.</div></div>
+<div class="palabra"><span class="termino">reforma borbónica</span><div class="definicion">Conjunto de cambios administrativos y económicos que la dinastía Borbón introdujo en el Imperio español durante el siglo XVIII para hacerlo más eficiente y rentable.</div></div>
+<div class="palabra"><span class="termino">soberanía</span><div class="definicion">Poder supremo de un Estado sobre su territorio, sin reconocer autoridad superior. El concepto moderno de soberanía nació con los tratados de Westfalia (1648).</div></div>
+<div class="palabra"><span class="termino">tratados de Westfalia</span><div class="definicion">Acuerdos de 1648 que pusieron fin a la Guerra de los Treinta Años y establecieron los principios del sistema internacional moderno basado en Estados soberanos.</div></div>
+<div class="palabra"><span class="termino">virreinato</span><div class="definicion">División administrativa del Imperio español en América, gobernada por un virrey designado por el rey. Los cuatro virreinatos eran Nueva España, Perú, Nueva Granada y Río de la Plata.</div></div>
+    </div>
+  </div>
+
+  <div class="firma">
+    Página diseñada por el Prof. de Historia Claudio Damián Sacco, con asistencia técnica de Claude, Anthropic.
+  </div>
+
+</div>
+
+</body>
+</html>

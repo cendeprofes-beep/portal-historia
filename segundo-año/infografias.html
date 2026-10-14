@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Infografías · Portal de Historia 2°</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Source+Sans+3:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+:root {
+--ink: #1a1209;--parchment: #f5efe2;--warm: #e8dcc8;--gold: #c09040;
+--gold-deep: #8a6420;--rust: #8b3a1a;--rust-light:#b85030;
+--shadow: rgba(26,18,9,0.15);
+}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Source Sans 3',sans-serif;background: var(--parchment) url('imagenes/mapa.jpg') center/cover fixed;color:var(--ink);min-height:100vh;display:flex;flex-direction:column;}
+body::before{content:'';position:fixed;inset:0;background-image:repeating-linear-gradient(0deg,transparent,transparent 28px,rgba(180,150,100,0.07) 28px,rgba(180,150,100,0.07) 29px);pointer-events: none; background-color: rgba(245,239,226,0.68);z-index:0;}
+header{position:relative;z-index:2;background:var(--rust);background-image:linear-gradient(160deg,#a04020 0%,#6b2810 100%);padding:1.4rem 2rem;display:flex;align-items:center;gap:1.2rem;box-shadow:0 3px 16px var(--shadow);}
+header::after{content:'';position:absolute;bottom:0;left:0;right:0;height:3px;background:linear-gradient(90deg,transparent,var(--gold),transparent);}
+.btn-volver{display:inline-flex;align-items:center;gap:.4rem;background:rgba(255,255,255,.12);color:rgba(255,255,255,.9);text-decoration:none;font-size:.88rem;font-weight:600;padding:.45rem 1rem;border-radius:40px;border:1px solid rgba(255,255,255,.2);transition:background .2s;white-space:nowrap;}
+.btn-volver:hover{background:rgba(255,255,255,.22);}
+.header-titulo{flex:1;}
+.header-titulo h1{font-family:'Playfair Display',serif;font-size:clamp(1.1rem,2.5vw,1.5rem);font-weight:700;color:#fff;line-height:1.1;}
+.header-titulo p{font-size:.88rem;color:rgba(255,255,255,.65);font-weight:300;margin-top:.2rem;}
+.buscador-wrap{position:relative;z-index:2;background:var(--warm);border-bottom:1px solid rgba(180,150,100,.3);padding:1.2rem 2rem;display:flex;align-items:center;gap:1rem;}
+.buscador-icono{font-size:1.2rem;flex-shrink:0;color:var(--gold-deep);}
+#buscador{flex:1;border:2px solid rgba(180,150,100,.35);border-radius:40px;padding:.65rem 1.2rem;font-family:'Source Sans 3',sans-serif;font-size:1rem;background:#fff;color:var(--ink);outline:none;transition:border-color .2s,box-shadow .2s;}
+#buscador:focus{border-color:var(--rust);box-shadow:0 0 0 3px rgba(139,58,26,.12);}
+#buscador::placeholder{color:#b0a090;font-weight:300;}
+.contador-resultados{font-size:.82rem;color:#8a7060;white-space:nowrap;min-width:80px;text-align:right;}
+.grilla-wrap{position:relative;z-index:1;flex:1;padding:2rem;}
+.sin-resultados{display:none;text-align:center;padding:3rem;color:#8a7060;font-style:italic;}
+.grilla{display:grid;grid-template-columns:repeat(5,1fr);gap:.75rem;}
+.mapa-card{background:#fff;border:1px solid rgba(180,150,100,.25);border-radius:8px;cursor:pointer;display:flex;flex-direction:column;align-items:stretch;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.06);transition:transform .18s ease,box-shadow .18s ease,opacity .25s ease;animation:popIn .3s ease both;}
+.mapa-card:hover{transform:translateY(-4px) scale(1.03);box-shadow:0 10px 24px rgba(139,58,26,.18);}
+.mapa-card .img-wrap{width:100%;aspect-ratio:4/3;overflow:hidden;flex-shrink:0;}
+.mapa-card .img-wrap img{width:100%;height:100%;object-fit:cover;display:block;}
+.mapa-card .card-num{font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--gold-deep);padding:.45rem .6rem .1rem;text-align:center;}
+.mapa-card .card-title{font-size:.76rem;font-weight:700;color:var(--ink);text-align:center;padding:.1rem .5rem .55rem;line-height:1.35;border-top:1px solid var(--warm);margin-top:.3rem;}
+.mapa-card.oculta{display:none;}
+@keyframes popIn{from{opacity:0;transform:scale(.9)}to{opacity:1;transform:scale(1)}}
+
+/* ══════════ VISOR ══════════ */
+.visor-overlay{position:fixed;inset:0;background:rgba(10,8,5,.92);backdrop-filter:blur(4px);z-index:1000;display:none;align-items:center;justify-content:center;cursor:grab;}
+.visor-overlay.activo{display:flex;}
+.visor-contenedor{width:90vw;height:85vh;display:flex;align-items:center;justify-content:center;overflow:hidden;}
+.visor-imagen{max-width:90%;max-height:80vh;object-fit:contain;transition:transform .15s ease;cursor:inherit;touch-action:none;user-select:none;-webkit-user-drag:none;}
+.visor-cerrar{position:absolute;top:1.5rem;right:1.5rem;background:rgba(255,255,255,.15);border:none;color:#fff;width:40px;height:40px;border-radius:50%;font-size:1.2rem;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .2s;z-index:1001;}
+.visor-cerrar:hover{background:rgba(255,255,255,.3);}
+.visor-nav{position:absolute;top:50%;transform:translateY(-50%);background:rgba(255,255,255,.15);border:none;color:#fff;width:46px;height:46px;border-radius:50%;font-size:1.4rem;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .2s;z-index:1001;}
+.visor-nav:hover{background:rgba(255,255,255,.3);}
+.visor-nav:disabled{opacity:.2;cursor:default;pointer-events:none;}
+.visor-prev{left:1.2rem;}
+.visor-next{right:4.5rem;}
+.visor-titulo{position:absolute;top:1.4rem;left:50%;transform:translateX(-50%);background:rgba(0,0,0,.6);color:#fff;padding:.4rem 1rem;border-radius:20px;font-size:.8rem;font-weight:600;max-width:60vw;text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;pointer-events:none;z-index:1001;}
+.visor-info{position:absolute;bottom:1rem;left:50%;transform:translateX(-50%);background:rgba(0,0,0,.6);color:#fff;padding:.4rem .9rem;border-radius:20px;font-size:.75rem;font-weight:600;letter-spacing:.05em;pointer-events:none;}
+
+@media(max-width:900px){.grilla{grid-template-columns:repeat(4,1fr);}}
+@media(max-width:600px){.grilla{grid-template-columns:repeat(2,1fr);gap:.5rem;}.grilla-wrap{padding:1rem;}.buscador-wrap{padding:1rem;}header{padding:1rem;}}
+footer{position:relative;z-index:1;background:var(--ink);color:rgba(255,255,255,.45);text-align:center;padding:1rem;font-size:.78rem;letter-spacing:.04em;}
+</style>
+</head>
+<body>
+<header>
+<a href="recursos.html" class="btn-volver">← Recursos</a>
+<a href="index.html" style="position:fixed;top:15px;right:20px;background:rgba(139,58,26,0.85);color:#fff;text-decoration:none;padding:6px 12px;border-radius:20px;font-size:0.8rem;z-index:101;border:1px solid rgba(255,255,255,0.3);display:inline-flex;align-items:center;gap:6px;">🏠 Ir a página principal</a>
+<div class="header-titulo"><h1>📊 Infografías</h1><p>49 infografías · Historia de 2.° año del Nivel Secundario</p></div>
+</header>
+
+<div class="buscador-wrap">
+<span class="buscador-icono">🔍</span>
+<input type="search" id="buscador" placeholder="Buscá por número o título..." autocomplete="off" spellcheck="false">
+<span class="contador-resultados" id="contador"></span>
+</div>
+
+<div class="grilla-wrap">
+<p class="sin-resultados" id="sinResultados">No se encontraron infografías para esa búsqueda.</p>
+<div class="grilla" id="grilla"></div>
+</div>
+
+<div id="visorOverlay" class="visor-overlay">
+<div class="visor-contenedor">
+<img id="visorImg" class="visor-imagen" draggable="false" alt="">
+</div>
+<button id="visorCerrar" class="visor-cerrar" title="Cerrar (ESC)">✕</button>
+<button id="visorPrev" class="visor-nav visor-prev" title="Anterior">&#8249;</button>
+<button id="visorNext" class="visor-nav visor-next" title="Siguiente">&#8250;</button>
+<div id="visorTitulo" class="visor-titulo"></div>
+<div id="visorInfo" class="visor-info">Escala: 100%</div>
+</div>
+
+<footer>WEB-HISTORIA2 · Material de estudio · Historia de Segundo Año del Nivel Secundario</footer>
+
+<script>
+// ══════════════════════════════════════════════
+// 1. DATOS: títulos reales de cada infografía
+// ══════════════════════════════════════════════
+const INFOGRAFIAS = [
+  { archivo: "infografias/infografia1.png",  titulo: "El comienzo de la Edad Moderna" },
+  { archivo: "infografias/infografia2.png",  titulo: "Las múltiples Américas precolombinas" },
+  { archivo: "infografias/infografia3.png",  titulo: "El imperio azteca" },
+  { archivo: "infografias/infografia4.png",  titulo: "Cultura, política y religión azteca" },
+  { archivo: "infografias/infografia5.png",  titulo: "La religión de los aztecas" },
+  { archivo: "infografias/infografia6.png",  titulo: "Los indígenas en el actual territorio argentino" },
+  { archivo: "infografias/infografia7.png",  titulo: "La transición europea a la modernidad" },
+  { archivo: "infografias/infografia8.png",  titulo: "El Renacimiento" },
+  { archivo: "infografias/infografia9.png",  titulo: "El Humanismo y la utopía" },
+  { archivo: "infografias/infografia10.png", titulo: "La Reforma Protestante" },
+  { archivo: "infografias/infografia11.png", titulo: "Avances científicos y tecnológicos" },
+  { archivo: "infografias/infografia12.png", titulo: "La formación del Estado moderno" },
+  { archivo: "infografias/infografia13.png", titulo: "Italia en el Renacimiento" },
+  { archivo: "infografias/infografia14.png", titulo: "La España moderna y la decadencia del imperio español" },
+  { archivo: "infografias/infografia15.png", titulo: "La Francia moderna y las revoluciones inglesas" },
+  { archivo: "infografias/infografia16.png", titulo: "El nacimiento del sistema-mundo capitalista" },
+  { archivo: "infografias/infografia17.png", titulo: "El mercantilismo y sus diferentes variantes" },
+  { archivo: "infografias/infografia18.png", titulo: "El Barroco: arte y contrarreforma" },
+  { archivo: "infografias/infografia19.png", titulo: "La utopía renacentista" },
+  { archivo: "infografias/infografia20.png", titulo: "Las formas de dominación europea" },
+  { archivo: "infografias/infografia21.png", titulo: "Principales acontecimientos del siglo XV al siglo XVIII (causas de la conquista)" },
+  { archivo: "infografias/infografia22.png", titulo: "La organización de la conquista" },
+  { archivo: "infografias/infografia23.png", titulo: "La dominación española y la conquista de México" },
+  { archivo: "infografias/infografia24.png", titulo: "La conquista del imperio inca" },
+  { archivo: "infografias/infografia25.png", titulo: "La conquista del actual territorio argentino" },
+  { archivo: "infografias/infografia26.png", titulo: "La colonización del Interior y la fundación de Buenos Aires" },
+  { archivo: "infografias/infografia27.png", titulo: "Las consecuencias de la conquista" },
+  { archivo: "infografias/infografia28.png", titulo: "Los métodos de sometimiento y los cambios culturales" },
+  { archivo: "infografias/infografia29.png", titulo: "Los imperios coloniales en América (siglos XVII y XVIII)" },
+  { archivo: "infografias/infografia30.png", titulo: "Los virreinatos y el gobierno colonial" },
+  { archivo: "infografias/infografia31.png", titulo: "La economía colonial" },
+  { archivo: "infografias/infografia32.png", titulo: "Monopolio y contrabando en la América española" },
+  { archivo: "infografias/infografia33.png", titulo: "La polémica entre Juan Ginés de Sepúlveda y Bartolomé de las Casas" },
+  { archivo: "infografias/infografia34.png", titulo: "Brasil colonial: riqueza para pocos, trabajo para muchos" },
+  { archivo: "infografias/infografia35.png", titulo: "El horror de la Trata negrera y el rol político de la Iglesia en América" },
+  { archivo: "infografias/infografia36.png", titulo: "Los jesuitas en América" },
+  { archivo: "infografias/infografia37.png", titulo: "La Declaración de los Derechos del Hombre y del Ciudadano" },
+  { archivo: "infografias/infografia38.png", titulo: "Las revoluciones atlánticas (1776-1826)" },
+  { archivo: "infografias/infografia39.png", titulo: "El contexto de las nuevas ideas de la Ilustración" },
+  { archivo: "infografias/infografia40.png", titulo: "El despotismo ilustrado" },
+  { archivo: "infografias/infografia41.png", titulo: "La formación del capitalismo: del mercantilismo a la industria" },
+  { archivo: "infografias/infografia42.png", titulo: "La revolución industrial: un cambio radical" },
+  { archivo: "infografias/infografia43.png", titulo: "Burguesía vs proletariado: dos clases sociales, dos mundos en conflicto" },
+  { archivo: "infografias/infografia44.png", titulo: "Del Antiguo Régimen a las revoluciones atlánticas (1789-1826)" },
+  { archivo: "infografias/infografia45.png", titulo: "Las ondas expansivas de la Revolución Francesa (1789-1871)" },
+  { archivo: "infografias/infografia46.png", titulo: "Las Reformas Borbónicas: modernizar el imperio y controlar las colonias (1700-1808)" },
+  { archivo: "infografias/infografia47.png", titulo: "Las Reformas Pombalinas: modernizar Portugal, reorganizar Brasil (1750-1777)" },
+  { archivo: "infografias/infografia48.png", titulo: "Las revoluciones de independencia en América Latina (1808-1826)" },
+  { archivo: "infografias/infografia49.png", titulo: "Debate historiográfico sobre la Modernidad" },
+  { archivo: "infografias/infografia50.png", titulo: "El Tawantinsuyu" }
+];
+
+// ══════════════════════════════════════════════
+// 2. GENERACIÓN DE LA GRILLA
+// ══════════════════════════════════════════════
+const grilla = document.getElementById('grilla');
+const buscador = document.getElementById('buscador');
+const contador = document.getElementById('contador');
+const sinResultados = document.getElementById('sinResultados');
+
+const FALLBACK = "data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 400 300%22%3E%3Crect fill=%22%23e8dcc8%22 width=%22400%22 height=%22300%22/%3E%3Ctext x=%2250%25%22 y=%2250%25%22 dominant-baseline=%22middle%22 text-anchor=%22middle%22 fill=%22%238a6420%22 font-family=%22sans-serif%22 font-size=%2218%22%3EImagen no disponible%3C/text%3E%3C/svg%3E";
+
+INFOGRAFIAS.forEach((item, idx) => {
+  const card = document.createElement('div');
+  card.className = 'mapa-card';
+  card.dataset.titulo = item.titulo.toLowerCase();
+  card.dataset.index = idx;
+  card.style.animationDelay = `${(idx % 20) * 15}ms`;
+  card.innerHTML = `
+    <div class="img-wrap">
+      <img src="${item.archivo}" alt="${item.titulo}" loading="lazy" onerror="this.src='${FALLBACK}'">
+    </div>
+    <div class="card-num">Infografía ${idx + 1}</div>
+    <div class="card-title">${item.titulo}</div>`;
+  card.addEventListener('click', (e) => { e.stopPropagation(); abrirVisor(idx); });
+  grilla.appendChild(card);
+});
+
+actualizarContador(INFOGRAFIAS.length);
+function actualizarContador(n){
+  contador.textContent = n === INFOGRAFIAS.length
+    ? `${n} infografía${n !== 1 ? 's' : ''}`
+    : `${n} resultado${n !== 1 ? 's' : ''}`;
+}
+
+buscador.addEventListener('input', () => {
+  const q = buscador.value.trim().toLowerCase();
+  let visibles = 0;
+  grilla.querySelectorAll('.mapa-card').forEach(card => {
+    const match = !q || card.dataset.titulo.includes(q);
+    card.classList.toggle('oculta', !match);
+    if (match) visibles++;
+  });
+  actualizarContador(visibles);
+  sinResultados.style.display = visibles === 0 ? 'block' : 'none';
+});
+
+// ══════════════════════════════════════════════
+// 3. LÓGICA DEL VISOR (Zoom + Pan + Táctil + Navegación)
+// ══════════════════════════════════════════════
+const visorOverlay  = document.getElementById('visorOverlay');
+const visorImg      = document.getElementById('visorImg');
+const visorCerrar   = document.getElementById('visorCerrar');
+const visorPrev     = document.getElementById('visorPrev');
+const visorNext     = document.getElementById('visorNext');
+const visorTitulo   = document.getElementById('visorTitulo');
+const visorInfo     = document.getElementById('visorInfo');
+
+let currentIndex = 0;
+let scale = 1, tx = 0, ty = 0;
+let isDragging = false, startX, startY, startTx, startTy;
+let touchDist = 0, touchScaleStart = 1;
+
+function abrirVisor(index) {
+  currentIndex = index;
+  scale = 1; tx = 0; ty = 0;
+  visorImg.src    = INFOGRAFIAS[index].archivo;
+  visorImg.alt    = INFOGRAFIAS[index].titulo;
+  visorTitulo.textContent = `${index + 1} / ${INFOGRAFIAS.length} · ${INFOGRAFIAS[index].titulo}`;
+  visorPrev.disabled = index === 0;
+  visorNext.disabled = index === INFOGRAFIAS.length - 1;
+  visorOverlay.classList.add('activo');
+  document.body.style.overflow = 'hidden';
+  actualizarTransform();
+}
+
+function cerrarVisor() {
+  visorOverlay.classList.remove('activo');
+  document.body.style.overflow = '';
+}
+
+function navVisor(dir) {
+  const next = currentIndex + dir;
+  if (next >= 0 && next < INFOGRAFIAS.length) abrirVisor(next);
+}
+
+function actualizarTransform() {
+  visorImg.style.transform = `translate(${tx}px, ${ty}px) scale(${scale})`;
+  visorInfo.textContent = `Escala: ${Math.round(scale * 100)}%`;
+}
+
+// Zoom con rueda
+visorImg.addEventListener('wheel', (e) => {
+  e.preventDefault();
+  scale = Math.min(Math.max(scale + (e.deltaY > 0 ? -0.08 : 0.08), 0.4), 6);
+  actualizarTransform();
+}, { passive: false });
+
+// Arrastre con mouse
+visorImg.addEventListener('mousedown', (e) => {
+  isDragging = true;
+  startX = e.clientX; startY = e.clientY;
+  startTx = tx; startTy = ty;
+  visorImg.style.cursor = 'grabbing';
+});
+window.addEventListener('mousemove', (e) => {
+  if (!isDragging) return;
+  tx = startTx + (e.clientX - startX);
+  ty = startTy + (e.clientY - startY);
+  actualizarTransform();
+});
+window.addEventListener('mouseup', () => {
+  isDragging = false;
+  visorImg.style.cursor = 'grab';
+});
+
+// Táctil: arrastre y pinch-zoom
+visorImg.addEventListener('touchstart', (e) => {
+  if (e.touches.length === 1) {
+    isDragging = true;
+    startX = e.touches[0].clientX; startY = e.touches[0].clientY;
+    startTx = tx; startTy = ty;
+  } else if (e.touches.length === 2) {
+    isDragging = false;
+    touchDist = Math.hypot(e.touches[0].clientX - e.touches[1].clientX, e.touches[0].clientY - e.touches[1].clientY);
+    touchScaleStart = scale;
+  }
+}, { passive: false });
+
+visorImg.addEventListener('touchmove', (e) => {
+  e.preventDefault();
+  if (e.touches.length === 1 && isDragging) {
+    tx = startTx + (e.touches[0].clientX - startX);
+    ty = startTy + (e.touches[0].clientY - startY);
+    actualizarTransform();
+  } else if (e.touches.length === 2) {
+    const nd = Math.hypot(e.touches[0].clientX - e.touches[1].clientX, e.touches[0].clientY - e.touches[1].clientY);
+    scale = Math.min(Math.max(touchScaleStart * (nd / touchDist), 0.4), 6);
+    actualizarTransform();
+  }
+}, { passive: false });
+
+visorImg.addEventListener('touchend', () => { isDragging = false; });
+
+// Botones de navegación
+visorPrev.addEventListener('click', (e) => { e.stopPropagation(); navVisor(-1); });
+visorNext.addEventListener('click', (e) => { e.stopPropagation(); navVisor(1); });
+visorCerrar.addEventListener('click', cerrarVisor);
+visorCerrar.addEventListener('mousedown', e => e.stopPropagation());
+visorOverlay.addEventListener('click', e => { if (e.target === visorOverlay) cerrarVisor(); });
+
+// Teclado: ESC cierra, ← → navegan
+document.addEventListener('keydown', e => {
+  if (!visorOverlay.classList.contains('activo')) return;
+  if (e.key === 'Escape')      cerrarVisor();
+  if (e.key === 'ArrowLeft')   navVisor(-1);
+  if (e.key === 'ArrowRight')  navVisor(1);
+});
+
+visorImg.addEventListener('dragstart', e => e.preventDefault());
+</script>
+</body>
+</html>

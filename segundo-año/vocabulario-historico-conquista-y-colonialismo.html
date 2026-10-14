@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Conquista y colonialismo – Vocabulario de la Edad Moderna</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background-color: #0a0800;
+      background-image: url('imagenes/mapa-mundo.png');
+      background-size: cover;
+      background-position: center center;
+      background-repeat: no-repeat;
+      background-attachment: fixed;
+      color: white;
+      font-family: 'Georgia', serif;
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background: rgba(5, 3, 0, 0.84);
+      z-index: 0;
+    }
+
+    .pagina {
+      position: relative;
+      z-index: 1;
+      max-width: 860px;
+      margin: 0 auto;
+    }
+
+    /* ── BARRA SUPERIOR ── */
+    .barra-superior {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 0 24px;
+      gap: 10px;
+    }
+
+    .nav-btn {
+      color: #c9a84c;
+      text-decoration: none;
+      background-color: rgba(0,0,0,0.6);
+      border: 1px solid rgba(201,168,76,0.4);
+      padding: 8px 16px;
+      border-radius: 6px;
+      font-size: 0.85rem;
+      transition: 0.2s;
+      font-family: 'Georgia', serif;
+    }
+
+    .nav-btn:hover {
+      background-color: rgba(201,168,76,0.15);
+      border-color: #c9a84c;
+    }
+
+    /* ── ENCABEZADO ── */
+    .encabezado {
+      text-align: center;
+      margin-bottom: 36px;
+    }
+
+    .encabezado h1 {
+      font-size: 2rem;
+      color: #c9a84c;
+      text-shadow: 0 0 20px rgba(201,168,76,0.4), 2px 2px 6px black;
+      margin-bottom: 10px;
+      letter-spacing: 1px;
+    }
+
+    .encabezado p {
+      color: #bbb;
+      font-style: italic;
+      font-size: 0.92rem;
+      line-height: 1.6;
+    }
+
+    /* ── ACORDEÓN ── */
+    .acordeon {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-bottom: 50px;
+    }
+
+    /* Cabecera del tema */
+    .tema-cabecera {
+      width: 100%;
+      background: rgba(6, 4, 0, 0.85);
+      border: 1.5px solid rgba(201,168,76,0.45);
+      border-radius: 10px;
+      padding: 16px 22px;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: all 0.22s ease;
+      text-align: left;
+      color: white;
+      font-family: 'Georgia', serif;
+    }
+
+    .tema-cabecera:hover {
+      background: rgba(20, 14, 0, 0.9);
+      border-color: #c9a84c;
+      box-shadow: 0 0 16px rgba(201,168,76,0.2);
+    }
+
+    .tema-cabecera.activo {
+      border-color: #c9a84c;
+      border-bottom-left-radius: 0;
+      border-bottom-right-radius: 0;
+      background: rgba(30, 20, 0, 0.92);
+      box-shadow: 0 0 20px rgba(201,168,76,0.2);
+    }
+
+    .tema-label {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .tema-icono {
+      font-size: 1.4rem;
+      line-height: 1;
+    }
+
+    .tema-nombre {
+      font-size: 1.05rem;
+      font-weight: bold;
+      color: #c9a84c;
+      letter-spacing: 0.3px;
+    }
+
+    .tema-cantidad {
+      font-size: 0.72rem;
+      color: #888;
+      font-style: italic;
+      margin-top: 2px;
+    }
+
+    .tema-flecha {
+      color: #c9a84c;
+      font-size: 1.1rem;
+      transition: transform 0.3s ease;
+      flex-shrink: 0;
+    }
+
+    .tema-cabecera.activo .tema-flecha {
+      transform: rotate(180deg);
+    }
+
+    /* Panel desplegable */
+    .tema-panel {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.45s ease;
+      background: rgba(4, 3, 0, 0.88);
+      border: 1.5px solid #c9a84c;
+      border-top: none;
+      border-bottom-left-radius: 10px;
+      border-bottom-right-radius: 10px;
+    }
+
+    .tema-panel.abierto {
+      max-height: 9999px;
+    }
+
+    /* Lista de palabras */
+    .lista-palabras {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      padding: 20px 22px 24px;
+    }
+
+    .palabra {
+      background: rgba(255,255,255,0.05);
+      border-left: 4px solid #c9a84c;
+      padding: 10px 14px;
+      border-radius: 0 8px 8px 0;
+      transition: background 0.2s;
+    }
+
+    .palabra:hover {
+      background: rgba(201,168,76,0.08);
+    }
+
+    .termino {
+      font-weight: bold;
+      color: #c9a84c;
+      font-size: 1.35rem;
+      font-family: 'Georgia', serif;
+    }
+
+    .definicion {
+      margin-top: 5px;
+      color: #e8e8e8;
+      font-size: 1.15rem;
+      line-height: 1.7;
+      font-family: Georgia, serif;
+    }
+
+    /* ── FIRMA ── */
+    .firma {
+      text-align: center;
+      margin-top: 10px;
+      padding-top: 20px;
+      border-top: 1px solid rgba(201,168,76,0.2);
+      font-size: 1.78rem;
+      color: #777;
+      font-style: italic;
+      margin-bottom: 30px;
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 640px) {
+      .encabezado h1 { font-size: 1.5rem; }
+      .tema-nombre { font-size: 0.92rem; }
+      .tema-cabecera { padding: 13px 16px; }
+      .lista-palabras { padding: 16px 16px 20px; }
+      .termino { font-size: 1.2rem; }
+      .definicion { font-size: 1rem; }
+    }
+
+    /* ── BOTÓN FIJO PÁGINA PRINCIPAL ── */
+    .btn-home-fijo {
+      position: fixed;
+      top: 14px;
+      right: 18px;
+      z-index: 999;
+      background: rgba(6,4,0,0.88);
+      color: var(--gold);
+      text-decoration: none;
+      font-family: 'Georgia', serif;
+      font-size: 0.82rem;
+      font-weight: bold;
+      padding: 7px 14px;
+      border-radius: 20px;
+      border: 1px solid rgba(201,168,76,0.5);
+      box-shadow: 0 2px 10px rgba(0,0,0,0.5);
+      transition: background 0.2s, border-color 0.2s;
+      white-space: nowrap;
+    }
+    .btn-home-fijo:hover {
+      background: rgba(201,168,76,0.18);
+      border-color: var(--gold);
+    }
+
+    /* ── FIRMA INSTITUCIONAL ── */
+    .firma-institucional {
+      text-align: center;
+      padding: 14px 20px 10px;
+      position: relative;
+      z-index: 2;
+      background: rgba(6,4,0,0.75);
+      border-bottom: 1px solid rgba(201,168,76,0.25);
+    }
+    .firma-institucional p {
+      font-family: 'IM Fell English', serif;
+      font-size: 1.05rem;
+      font-style: italic;
+      color: #c9a84c;
+      text-shadow: 0 0 18px rgba(201,168,76,0.55), 0 1px 4px rgba(0,0,0,0.8);
+      letter-spacing: 0.03em;
+      margin: 0;
+    }
+    .firma-institucional .autor-nombre {
+      font-size: 1.5rem;
+      font-style: italic;
+      color: #c9a84c;
+      text-shadow: 0 0 22px rgba(201,168,76,0.6), 0 1px 4px rgba(0,0,0,0.9);
+      letter-spacing: 0.02em;
+    }
+  
+    :root { --gold: #c9a84c; }
+    /* Botones de tema (páginas índice) */
+    a.tema-boton { text-decoration: none; }
+    a.tema-boton .tema-flecha { transform: none; }
+    a.tema-boton:hover .tema-flecha { transform: translateX(4px); }
+    /* Panel de términos siempre visible */
+    .panel-terminos {
+      background: rgba(4, 3, 0, 0.88);
+      border: 1.5px solid #c9a84c;
+      border-radius: 10px;
+      margin-bottom: 50px;
+    }
+    .encabezado .tema-icono-grande { display: block; font-size: 2.6rem; margin-bottom: 6px; }
+  </style>
+</head>
+<body>
+
+<div class="firma-institucional">
+  <p>Historia de 2.° año del Nivel Secundario · <span class="autor-nombre">Prof. Claudio Damián Sacco</span></p>
+</div>
+
+<div class="pagina">
+
+  <div class="barra-superior">
+    <a href="vocabulario-historico.html" class="nav-btn">← Volver al índice</a>
+    <a href="../index.html" class="nav-btn">Página Principal</a>
+  </div>
+
+  <div class="encabezado">
+    <span class="tema-icono-grande">⚔️</span>
+    <h1>Conquista y colonialismo</h1>
+    <p>32 términos, ordenados alfabéticamente.</p>
+  </div>
+
+  <div class="panel-terminos">
+    <div class="lista-palabras">
+<div class="palabra"><span class="termino">ayllu</span><div class="definicion">Comunidad de familias andinas que compartían tierras, trabajo y rituales. Base de la organización social inca que los españoles usaron y distorsionaron para cobrar tributos.</div></div>
+<div class="palabra"><span class="termino">bandeirantes</span><div class="definicion">Expedicionarios portugueses del interior de Brasil que cazaban indígenas para esclavizarlos y buscaban metales preciosos.</div></div>
+<div class="palabra"><span class="termino">cabildo</span><div class="definicion">Institución de gobierno local en las ciudades coloniales hispanoamericanas, equivalente a un municipio.</div></div>
+<div class="palabra"><span class="termino">capitulación</span><div class="definicion">Contrato entre la Corona española y un conquistador privado. El Estado ponía el permiso; el conquistador ponía el dinero y el riesgo.</div></div>
+<div class="palabra"><span class="termino">Casa de Contratación</span><div class="definicion">Organismo español que controlaba todo el comercio con América: qué salía, qué entraba, quién podía viajar.</div></div>
+<div class="palabra"><span class="termino">catástrofe demográfica</span><div class="definicion">Nombre que dan los historiadores a la muerte de entre 30 y 100 millones de personas indígenas americanas entre 1492 y 1650, causada por enfermedades, guerras y trabajo forzado.</div></div>
+<div class="palabra"><span class="termino">chinampa</span><div class="definicion">Plataforma flotante de cultivo sobre el lago Texcoco, usada por los mexicas para producir alimentos. Una de las tecnologías agrícolas más sofisticadas de su época.</div></div>
+<div class="palabra"><span class="termino">Consejo de Indias</span><div class="definicion">Organismo creado en España para gobernar las colonias americanas desde la metrópoli. Hacía las leyes, nombraba funcionarios y resolvía conflictos.</div></div>
+<div class="palabra"><span class="termino">contrabando colonial</span><div class="definicion">Comercio ilegal que evitaba el monopolio español. Buenos Aires prosperó durante dos siglos gracias a él.</div></div>
+<div class="palabra"><span class="termino">criollo</span><div class="definicion">Persona de origen europeo nacida en América. Tenía más derechos que los indígenas o los esclavos, pero menos que los españoles nacidos en España.</div></div>
+<div class="palabra"><span class="termino">doctrinero</span><div class="definicion">Sacerdote encargado de evangelizar a los indígenas en los pueblos de indios. Muchas veces fue también instrumento de control cultural.</div></div>
+<div class="palabra"><span class="termino">encomienda</span><div class="definicion">Sistema por el cual un conquistador recibía el derecho de cobrar tributo y trabajo de un grupo de indígenas a cambio de evangelizarlos y protegerlos. En la práctica fue trabajo forzado.</div></div>
+<div class="palabra"><span class="termino">encomendero</span><div class="definicion">El español que recibía una encomienda. Tenía poder casi absoluto sobre las comunidades indígenas asignadas.</div></div>
+<div class="palabra"><span class="termino">evangelización</span><div class="definicion">Proceso de conversión de los pueblos indígenas al catolicismo, muchas veces por la fuerza o bajo amenaza de castigo.</div></div>
+<div class="palabra"><span class="termino">extirpación de idolatrías</span><div class="definicion">Campaña de la Iglesia colonial para destruir las prácticas religiosas indígenas, consideradas herejía o brujería.</div></div>
+<div class="palabra"><span class="termino">intercambio colombino</span><div class="definicion">Intercambio de plantas, animales, enfermedades y personas entre América y Europa tras 1492. América dio papa, maíz, tomate, cacao. Europa dio trigo, caballos, vacas y viruela.</div></div>
+<div class="palabra"><span class="termino">mestizo</span><div class="definicion">Persona de origen mixto, con antepasados europeos e indígenas. En la sociedad colonial ocupaba una posición intermedia e inestable.</div></div>
+<div class="palabra"><span class="termino">mita colonial</span><div class="definicion">Sistema de trabajo forzado obligatorio impuesto a los indígenas, especialmente en las minas de plata. Tomó el nombre de una institución inca pero la vació de su sentido original.</div></div>
+<div class="palabra"><span class="termino">monopolio comercial</span><div class="definicion">Sistema por el cual solo España podía comerciar con sus colonias americanas. Todo debía pasar por Sevilla. Los precios eran altísimos y los productos llegaban tarde.</div></div>
+<div class="palabra"><span class="termino">mulato</span><div class="definicion">Término colonial para designar a la persona con antepasados europeos y africanos. Formaba parte de la compleja jerarquía racial de las colonias.</div></div>
+<div class="palabra"><span class="termino">palenque</span><div class="definicion">Comunidad autónoma fundada por esclavos fugitivos en América. El más famoso fue el de Palmares, en Brasil.</div></div>
+<div class="palabra"><span class="termino">pueblo de indios</span><div class="definicion">Concentración forzada de comunidades indígenas dispersas en aldeas organizadas según el modelo urbano europeo, para facilitar el cobro de tributos y la evangelización.</div></div>
+<div class="palabra"><span class="termino">quilombo</span><div class="definicion">Nombre brasileño para las comunidades de esclavos fugitivos. Sinónimo de palenque en el contexto lusófono.</div></div>
+<div class="palabra"><span class="termino">reducción</span><div class="definicion">Nombre técnico del pueblo de indios en el vocabulario colonial español.</div></div>
+<div class="palabra"><span class="termino">Requerimiento</span><div class="definicion">Documento legal que los conquistadores debían leer a los indígenas antes de atacarlos, explicando que el Papa había donado sus tierras a los reyes de España. Se leía en español, desde lejos, a personas que no entendían el idioma.</div></div>
+<div class="palabra"><span class="termino">sistema de castas</span><div class="definicion">Jerarquía social colonial basada en el origen étnico. Arriba los españoles peninsulares, abajo los esclavos africanos, con decenas de categorías intermedias según la mezcla racial.</div></div>
+<div class="palabra"><span class="termino">sistema-mundo</span><div class="definicion">Idea de que desde el siglo XVI existe un sistema económico global donde algunos países producen manufacturas y dominan (centro) y otros proveen materias primas y trabajo barato (periferia).</div></div>
+<div class="palabra"><span class="termino">tlatoani</span><div class="definicion">Jefe supremo del Imperio mexica, equivalente a un rey o emperador. Moctezuma era tlatoani cuando llegaron los españoles.</div></div>
+<div class="palabra"><span class="termino">trata atlántica</span><div class="definicion">Comercio de personas africanas esclavizadas hacia América entre los siglos XVI y XIX. Se estima que entre 12 y 15 millones de personas fueron transportadas en condiciones inhumanas.</div></div>
+<div class="palabra"><span class="termino">virreinato</span><div class="definicion">División administrativa del Imperio español en América. Había cuatro: Nueva España, Perú, Nueva Granada y Río de la Plata.</div></div>
+<div class="palabra"><span class="termino">yanaconazgo</span><div class="definicion">Sistema de servidumbre personal que ataba a un indígena a un dueño de por vida, a cambio de protección teórica.</div></div>
+<div class="palabra"><span class="termino">zambo</span><div class="definicion">Término colonial para la persona con antepasados indígenas y africanos.</div></div>
+    </div>
+  </div>
+
+  <div class="firma">
+    Página diseñada por el Prof. de Historia Claudio Damián Sacco, con asistencia técnica de Claude, Anthropic.
+  </div>
+
+</div>
+
+</body>
+</html>

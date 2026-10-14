@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Economía, comercio y trabajo – Vocabulario de la Edad Moderna</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background-color: #0a0800;
+      background-image: url('imagenes/mapa-mundo.png');
+      background-size: cover;
+      background-position: center center;
+      background-repeat: no-repeat;
+      background-attachment: fixed;
+      color: white;
+      font-family: 'Georgia', serif;
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background: rgba(5, 3, 0, 0.84);
+      z-index: 0;
+    }
+
+    .pagina {
+      position: relative;
+      z-index: 1;
+      max-width: 860px;
+      margin: 0 auto;
+    }
+
+    /* ── BARRA SUPERIOR ── */
+    .barra-superior {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 0 24px;
+      gap: 10px;
+    }
+
+    .nav-btn {
+      color: #c9a84c;
+      text-decoration: none;
+      background-color: rgba(0,0,0,0.6);
+      border: 1px solid rgba(201,168,76,0.4);
+      padding: 8px 16px;
+      border-radius: 6px;
+      font-size: 0.85rem;
+      transition: 0.2s;
+      font-family: 'Georgia', serif;
+    }
+
+    .nav-btn:hover {
+      background-color: rgba(201,168,76,0.15);
+      border-color: #c9a84c;
+    }
+
+    /* ── ENCABEZADO ── */
+    .encabezado {
+      text-align: center;
+      margin-bottom: 36px;
+    }
+
+    .encabezado h1 {
+      font-size: 2rem;
+      color: #c9a84c;
+      text-shadow: 0 0 20px rgba(201,168,76,0.4), 2px 2px 6px black;
+      margin-bottom: 10px;
+      letter-spacing: 1px;
+    }
+
+    .encabezado p {
+      color: #bbb;
+      font-style: italic;
+      font-size: 0.92rem;
+      line-height: 1.6;
+    }
+
+    /* ── ACORDEÓN ── */
+    .acordeon {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-bottom: 50px;
+    }
+
+    /* Cabecera del tema */
+    .tema-cabecera {
+      width: 100%;
+      background: rgba(6, 4, 0, 0.85);
+      border: 1.5px solid rgba(201,168,76,0.45);
+      border-radius: 10px;
+      padding: 16px 22px;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: all 0.22s ease;
+      text-align: left;
+      color: white;
+      font-family: 'Georgia', serif;
+    }
+
+    .tema-cabecera:hover {
+      background: rgba(20, 14, 0, 0.9);
+      border-color: #c9a84c;
+      box-shadow: 0 0 16px rgba(201,168,76,0.2);
+    }
+
+    .tema-cabecera.activo {
+      border-color: #c9a84c;
+      border-bottom-left-radius: 0;
+      border-bottom-right-radius: 0;
+      background: rgba(30, 20, 0, 0.92);
+      box-shadow: 0 0 20px rgba(201,168,76,0.2);
+    }
+
+    .tema-label {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .tema-icono {
+      font-size: 1.4rem;
+      line-height: 1;
+    }
+
+    .tema-nombre {
+      font-size: 1.05rem;
+      font-weight: bold;
+      color: #c9a84c;
+      letter-spacing: 0.3px;
+    }
+
+    .tema-cantidad {
+      font-size: 0.72rem;
+      color: #888;
+      font-style: italic;
+      margin-top: 2px;
+    }
+
+    .tema-flecha {
+      color: #c9a84c;
+      font-size: 1.1rem;
+      transition: transform 0.3s ease;
+      flex-shrink: 0;
+    }
+
+    .tema-cabecera.activo .tema-flecha {
+      transform: rotate(180deg);
+    }
+
+    /* Panel desplegable */
+    .tema-panel {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.45s ease;
+      background: rgba(4, 3, 0, 0.88);
+      border: 1.5px solid #c9a84c;
+      border-top: none;
+      border-bottom-left-radius: 10px;
+      border-bottom-right-radius: 10px;
+    }
+
+    .tema-panel.abierto {
+      max-height: 9999px;
+    }
+
+    /* Lista de palabras */
+    .lista-palabras {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      padding: 20px 22px 24px;
+    }
+
+    .palabra {
+      background: rgba(255,255,255,0.05);
+      border-left: 4px solid #c9a84c;
+      padding: 10px 14px;
+      border-radius: 0 8px 8px 0;
+      transition: background 0.2s;
+    }
+
+    .palabra:hover {
+      background: rgba(201,168,76,0.08);
+    }
+
+    .termino {
+      font-weight: bold;
+      color: #c9a84c;
+      font-size: 1.35rem;
+      font-family: 'Georgia', serif;
+    }
+
+    .definicion {
+      margin-top: 5px;
+      color: #e8e8e8;
+      font-size: 1.15rem;
+      line-height: 1.7;
+      font-family: Georgia, serif;
+    }
+
+    /* ── FIRMA ── */
+    .firma {
+      text-align: center;
+      margin-top: 10px;
+      padding-top: 20px;
+      border-top: 1px solid rgba(201,168,76,0.2);
+      font-size: 1.78rem;
+      color: #777;
+      font-style: italic;
+      margin-bottom: 30px;
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 640px) {
+      .encabezado h1 { font-size: 1.5rem; }
+      .tema-nombre { font-size: 0.92rem; }
+      .tema-cabecera { padding: 13px 16px; }
+      .lista-palabras { padding: 16px 16px 20px; }
+      .termino { font-size: 1.2rem; }
+      .definicion { font-size: 1rem; }
+    }
+
+    /* ── BOTÓN FIJO PÁGINA PRINCIPAL ── */
+    .btn-home-fijo {
+      position: fixed;
+      top: 14px;
+      right: 18px;
+      z-index: 999;
+      background: rgba(6,4,0,0.88);
+      color: var(--gold);
+      text-decoration: none;
+      font-family: 'Georgia', serif;
+      font-size: 0.82rem;
+      font-weight: bold;
+      padding: 7px 14px;
+      border-radius: 20px;
+      border: 1px solid rgba(201,168,76,0.5);
+      box-shadow: 0 2px 10px rgba(0,0,0,0.5);
+      transition: background 0.2s, border-color 0.2s;
+      white-space: nowrap;
+    }
+    .btn-home-fijo:hover {
+      background: rgba(201,168,76,0.18);
+      border-color: var(--gold);
+    }
+
+    /* ── FIRMA INSTITUCIONAL ── */
+    .firma-institucional {
+      text-align: center;
+      padding: 14px 20px 10px;
+      position: relative;
+      z-index: 2;
+      background: rgba(6,4,0,0.75);
+      border-bottom: 1px solid rgba(201,168,76,0.25);
+    }
+    .firma-institucional p {
+      font-family: 'IM Fell English', serif;
+      font-size: 1.05rem;
+      font-style: italic;
+      color: #c9a84c;
+      text-shadow: 0 0 18px rgba(201,168,76,0.55), 0 1px 4px rgba(0,0,0,0.8);
+      letter-spacing: 0.03em;
+      margin: 0;
+    }
+    .firma-institucional .autor-nombre {
+      font-size: 1.5rem;
+      font-style: italic;
+      color: #c9a84c;
+      text-shadow: 0 0 22px rgba(201,168,76,0.6), 0 1px 4px rgba(0,0,0,0.9);
+      letter-spacing: 0.02em;
+    }
+  
+    :root { --gold: #c9a84c; }
+    /* Botones de tema (páginas índice) */
+    a.tema-boton { text-decoration: none; }
+    a.tema-boton .tema-flecha { transform: none; }
+    a.tema-boton:hover .tema-flecha { transform: translateX(4px); }
+    /* Panel de términos siempre visible */
+    .panel-terminos {
+      background: rgba(4, 3, 0, 0.88);
+      border: 1.5px solid #c9a84c;
+      border-radius: 10px;
+      margin-bottom: 50px;
+    }
+    .encabezado .tema-icono-grande { display: block; font-size: 2.6rem; margin-bottom: 6px; }
+  </style>
+</head>
+<body>
+
+<div class="firma-institucional">
+  <p>Historia de 2.° año del Nivel Secundario · <span class="autor-nombre">Prof. Claudio Damián Sacco</span></p>
+</div>
+
+<div class="pagina">
+
+  <div class="barra-superior">
+    <a href="vocabulario-historico.html" class="nav-btn">← Volver al índice</a>
+    <a href="../index.html" class="nav-btn">Página Principal</a>
+  </div>
+
+  <div class="encabezado">
+    <span class="tema-icono-grande">💰</span>
+    <h1>Economía, comercio y trabajo</h1>
+    <p>27 términos, ordenados alfabéticamente.</p>
+  </div>
+
+  <div class="panel-terminos">
+    <div class="lista-palabras">
+<div class="palabra"><span class="termino">acumulación primitiva</span><div class="definicion">Proceso por el cual el capitalismo se formó apropiándose de tierras, trabajo y recursos ajenos, especialmente en las colonias y en el campo europeo.</div></div>
+<div class="palabra"><span class="termino">arriendo</span><div class="definicion">Alquiler de tierras por parte de campesinos que no son dueños. Fue la forma dominante de relación agraria en gran parte de Europa y América colonial.</div></div>
+<div class="palabra"><span class="termino">bolsa de comercio</span><div class="definicion">Institución donde se compran y venden títulos, mercancías y contratos financieros. La de Ámsterdam, fundada en 1602, fue la primera del mundo moderno.</div></div>
+<div class="palabra"><span class="termino">burguesía</span><div class="definicion">Clase social formada por comerciantes, banqueros, artesanos enriquecidos y profesionales que creció con el capitalismo y lideró las revoluciones del siglo XVIII.</div></div>
+<div class="palabra"><span class="termino">capital</span><div class="definicion">Dinero, bienes o recursos que se invierten para obtener ganancias. Es el elemento central del sistema capitalista.</div></div>
+<div class="palabra"><span class="termino">capitalismo</span><div class="definicion">Sistema económico basado en la propiedad privada, el trabajo asalariado, la acumulación de capital y el mercado como mecanismo de distribución.</div></div>
+<div class="palabra"><span class="termino">cercamiento</span><div class="definicion">Proceso por el cual las tierras comunales de los campesinos ingleses fueron apropiadas por nobles y terratenientes entre los siglos XVI y XVIII, expulsando a miles de familias hacia las ciudades.</div></div>
+<div class="palabra"><span class="termino">compañía de Indias</span><div class="definicion">Empresa comercial que recibía del Estado el monopolio del comercio con una región. Las más famosas fueron la Compañía Holandesa y la Compañía Inglesa de las Indias Orientales.</div></div>
+<div class="palabra"><span class="termino">deuda pública</span><div class="definicion">Dinero que el Estado pide prestado a banqueros o inversores para financiar guerras, obras o gastos que no puede cubrir con los impuestos.</div></div>
+<div class="palabra"><span class="termino">economía de plantación</span><div class="definicion">Sistema agrícola basado en grandes extensiones de tierra cultivadas por trabajo esclavo, orientadas a la exportación. Dominó el Caribe y Brasil.</div></div>
+<div class="palabra"><span class="termino">esclavitud</span><div class="definicion">Sistema en que personas son consideradas propiedad de otras y obligadas a trabajar sin remuneración, sin derechos y sin libertad de movimiento.</div></div>
+<div class="palabra"><span class="termino">excedente</span><div class="definicion">Producción que supera el consumo propio. Su existencia permite el comercio, el ahorro y la acumulación de riqueza.</div></div>
+<div class="palabra"><span class="termino">gremio</span><div class="definicion">Organización de artesanos del mismo oficio que regulaba la producción, los precios y la formación de nuevos trabajadores. Fue perdiendo poder con el avance del capitalismo.</div></div>
+<div class="palabra"><span class="termino">inflación</span><div class="definicion">Aumento generalizado de los precios. La llegada masiva de plata americana a Europa en el siglo XVI produjo una inflación enorme que arruinó a muchos.</div></div>
+<div class="palabra"><span class="termino">libre comercio</span><div class="definicion">Principio económico que propone eliminar las barreras al comercio entre países para que cada uno produzca lo que mejor sabe hacer.</div></div>
+<div class="palabra"><span class="termino">manufacturas</span><div class="definicion">Productos elaborados mediante trabajo humano y herramientas, antes de la industrialización. Su producción era artesanal y controlada por los gremios.</div></div>
+<div class="palabra"><span class="termino">mercantilismo</span><div class="definicion">Doctrina económica de los siglos XVI al XVIII que sostenía que la riqueza de un país dependía de acumular oro y plata, y que el Estado debía controlar el comercio para lograrlo.</div></div>
+<div class="palabra"><span class="termino">monopolio</span><div class="definicion">Control exclusivo de un mercado o producto por parte de un Estado o una empresa, que puede fijar los precios sin competencia.</div></div>
+<div class="palabra"><span class="termino">plusvalía</span><div class="definicion">Diferencia entre el valor que produce un trabajador y lo que recibe como salario. El capitalista se queda con esa diferencia como ganancia.</div></div>
+<div class="palabra"><span class="termino">proletariado</span><div class="definicion">Clase social formada por trabajadores que no tienen más que su fuerza de trabajo para vender. Surgió con la Revolución Industrial.</div></div>
+<div class="palabra"><span class="termino">proteccionismo</span><div class="definicion">Política económica que protege la producción nacional de la competencia extranjera mediante impuestos a las importaciones.</div></div>
+<div class="palabra"><span class="termino">renta</span><div class="definicion">Pago que hace el inquilino al dueño de una tierra o inmueble. En la sociedad colonial, la mayor parte de la riqueza se obtenía mediante rentas, no mediante trabajo productivo.</div></div>
+<div class="palabra"><span class="termino">salario</span><div class="definicion">Pago en dinero por el trabajo realizado. Su generalización fue una de las características del capitalismo industrial.</div></div>
+<div class="palabra"><span class="termino">servidumbre</span><div class="definicion">Sistema en que los campesinos están atados a la tierra del señor y deben trabajar para él sin poder moverse libremente. Fue la base de la economía feudal.</div></div>
+<div class="palabra"><span class="termino">trabajo asalariado</span><div class="definicion">Forma de trabajo en que el trabajador recibe un salario a cambio de su tiempo y esfuerzo, sin ser dueño de lo que produce.</div></div>
+<div class="palabra"><span class="termino">trata de esclavos</span><div class="definicion">Comercio de personas esclavizadas. La trata atlántica entre África, América y Europa fue el mayor movimiento forzado de personas de la historia.</div></div>
+<div class="palabra"><span class="termino">usura</span><div class="definicion">Préstamo de dinero a intereses exorbitantes. Fue condenada por la Iglesia durante siglos pero fue fundamental para el desarrollo del capitalismo comercial.</div></div>
+    </div>
+  </div>
+
+  <div class="firma">
+    Página diseñada por el Prof. de Historia Claudio Damián Sacco, con asistencia técnica de Claude, Anthropic.
+  </div>
+
+</div>
+
+</body>
+</html>
