@@ -1,0 +1,732 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Bloque 4 · Organización nacional y capitalismo industrial</title>
+<style>
+* { box-sizing: border-box; }
+body {
+    margin: 0; padding: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: #0a0a0a;
+    color: #eee;
+    overflow: hidden;
+}
+header {
+    background: #1a1a1a;
+    border-bottom: 2px solid #d4af37;
+    padding: 15px 20px;
+    text-align: center;
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%;
+    z-index: 100;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.5);
+}
+header h1 { margin: 0; color: #d4af37; font-size: 1.5rem; }
+header p  { margin: 4px 0 0; font-size: 0.82rem; color: #ccc; }
+
+.btn-volver {
+    position: fixed; top: 15px; left: 20px;
+    background: rgba(0,0,0,0.6); color: #d4af37;
+    text-decoration: none; padding: 6px 12px;
+    border-radius: 20px; font-size: 0.8rem;
+    z-index: 101; border: 1px solid #d4af37;
+}
+.btn-volver:hover { background: #d4af37; color: black; }
+
+/* ── Botones de navegación lateral ── */
+.nav-btn {
+    position: fixed; top: 50%; transform: translateY(-50%);
+    background: rgba(0,0,0,0.7); color: #d4af37;
+    border: 1px solid #d4af37; font-size: 2rem;
+    width: 45px; height: 80px; border-radius: 12px;
+    cursor: pointer; z-index: 200;
+    display: flex; align-items: center; justify-content: center;
+    transition: 0.2s;
+}
+.nav-btn:hover { background: #d4af37; color: black; }
+.nav-btn.disabled { opacity: 0.2; pointer-events: none; }
+.left-btn  { left: 10px; }
+.right-btn { right: 10px; }
+
+/* ── Contenedor con scroll horizontal ── */
+.timeline-wrapper {
+    position: relative;
+    top: 95px;
+    width: 100%;
+    height: calc(100vh - 95px);
+    overflow-x: auto;
+    overflow-y: visible;
+    cursor: grab;
+    scrollbar-width: thin;
+    scrollbar-color: #d4af37 #1a1a1a;
+}
+.timeline-wrapper:active { cursor: grabbing; }
+.timeline-wrapper::-webkit-scrollbar { height: 6px; }
+.timeline-wrapper::-webkit-scrollbar-track { background: #1a1a1a; }
+.timeline-wrapper::-webkit-scrollbar-thumb { background: #d4af37; border-radius: 3px; }
+
+/* ── Timeline ── */
+.timeline {
+    position: relative;
+    height: 420px;
+    margin: 0 60px;
+}
+
+/* Línea dorada horizontal */
+.linea-central {
+    position: absolute;
+    top: 40px; left: 0;
+    width: 100%; height: 4px;
+    background: linear-gradient(90deg, transparent, #d4af37 40px, #d4af37 calc(100% - 40px), transparent);
+    border-radius: 2px;
+    z-index: 1;
+}
+
+/* ── Evento ── */
+.evento {
+    position: absolute;
+    top: 0;
+    transform: translateX(-50%);
+    text-align: center;
+    cursor: pointer;
+    z-index: 2;
+}
+.punto {
+    width: 16px; height: 16px;
+    border-radius: 50%;
+    border: 2px solid white;
+    margin: 32px auto 0;
+    transition: transform 0.2s;
+    position: relative;
+    z-index: 3;
+}
+.punto:hover { transform: scale(1.4); }
+
+/* Colores de puntos por proceso */
+.org            { background: #d4af37; }
+.cie            { background: #00bfff; }
+.obr            { background: #e05050; }
+.exp            { background: #66cc66; }
+
+/* Info (leyenda) debajo del punto */
+.info {
+    position: absolute;
+    width: 145px;
+    left: 50%; transform: translateX(-50%);
+    text-align: center;
+    pointer-events: none;
+}
+.fecha  { font-size: 0.72rem; color: #d4af37; margin-bottom: 3px; }
+.titulo { font-size: 0.78rem; font-weight: bold; color: #fff; line-height: 1.2; }
+
+/* Línea conectora entre punto e info */
+.conector {
+    position: absolute;
+    left: 50%; transform: translateX(-50%);
+    top: 48px;
+    width: 1px;
+    background: rgba(212,175,55,0.5);
+    pointer-events: none;
+    z-index: 1;
+}
+
+/* ── Marco de imagen ── */
+.frame-imagen {
+    position: absolute;
+    width: 240px; height: 150px;
+    border: 2px solid #d4af37;
+    border-radius: 6px;
+    overflow: hidden;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.6);
+    transition: box-shadow 0.2s;
+    z-index: 4;
+}
+.frame-imagen:hover { box-shadow: 0 4px 25px rgba(212,175,55,0.55); }
+.frame-imagen img {
+    width: 100%; height: 100%;
+    object-fit: cover; display: block;
+    transition: transform 0.3s;
+}
+.frame-imagen:hover img { transform: scale(1.05); }
+.frame-caption {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    background: rgba(0,0,0,0.65);
+    color: #d4af37;
+    font-size: 0.65rem;
+    font-weight: bold;
+    text-align: center;
+    padding: 3px 4px;
+    pointer-events: none;
+}
+
+/* ── Leyenda de colores ── */
+.leyenda {
+    position: fixed; bottom: 15px; right: 15px;
+    background: rgba(0,0,0,0.78);
+    padding: 10px 14px; border-radius: 10px;
+    font-size: 0.7rem; z-index: 15;
+    backdrop-filter: blur(5px);
+    border: 1px solid #333;
+}
+.item-leyenda { display: flex; align-items: center; margin-bottom: 5px; }
+.item-leyenda:last-child { margin-bottom: 0; }
+.cor { width: 11px; height: 11px; border-radius: 50%; margin-right: 8px; flex-shrink: 0; }
+
+/* ── Modal de evento ── */
+.modal {
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,0.85);
+    display: none; justify-content: center; align-items: center;
+    z-index: 1000;
+}
+.modal-contenido {
+    background: #1e1e1e;
+    border-left: 5px solid #d4af37;
+    max-width: 480px; width: 90%;
+    padding: 22px; border-radius: 12px;
+    animation: fadeIn 0.2s;
+}
+.modal-contenido h2 { color: #d4af37; margin-top: 0; font-size: 1rem; }
+.modal-contenido h3 { color: #f0c060; font-size: 0.95rem; margin: 6px 0 10px; }
+.modal-contenido p  { line-height: 1.6; color: #ddd; font-size: 0.88rem; }
+.cerrar {
+    background: #d4af37; color: black;
+    border: none; padding: 8px 18px;
+    border-radius: 20px; margin-top: 14px;
+    cursor: pointer; font-weight: bold;
+}
+.cerrar:hover { background: #f0c870; }
+
+/* ── Visor de imagen (zoom + pan) ── */
+.visor-overlay {
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,0.92);
+    backdrop-filter: blur(4px);
+    z-index: 1001;
+    display: none;
+    align-items: center; justify-content: center;
+    cursor: grab;
+}
+.visor-overlay.activo { display: flex; }
+.visor-contenedor {
+    width: 90vw; height: 88vh;
+    display: flex; align-items: center; justify-content: center;
+    overflow: hidden;
+}
+.visor-imagen {
+    max-width: 90%; max-height: 85vh;
+    object-fit: contain;
+    transition: transform 0.12s ease;
+    cursor: inherit;
+    touch-action: none;
+    user-select: none;
+    -webkit-user-drag: none;
+}
+.visor-cerrar {
+    position: absolute; top: 1.2rem; right: 1.2rem;
+    background: rgba(255,255,255,0.15);
+    border: none; color: #fff;
+    width: 40px; height: 40px; border-radius: 50%;
+    font-size: 1.2rem; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: background 0.2s; z-index: 1002;
+}
+.visor-cerrar:hover { background: rgba(255,255,255,0.3); }
+.visor-caption {
+    position: absolute; bottom: 1rem; left: 50%; transform: translateX(-50%);
+    background: rgba(0,0,0,0.65); color: #d4af37;
+    padding: 0.35rem 1rem; border-radius: 20px;
+    font-size: 0.75rem; font-weight: 600;
+    pointer-events: none; white-space: nowrap;
+}
+.visor-info {
+    position: absolute; bottom: 3rem; left: 50%; transform: translateX(-50%);
+    background: rgba(0,0,0,0.55); color: #fff;
+    padding: 0.3rem 0.8rem; border-radius: 20px;
+    font-size: 0.7rem; pointer-events: none;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: scale(0.95); }
+    to   { opacity: 1; transform: scale(1); }
+}
+
+@media (max-width: 700px) {
+    .nav-btn { width: 35px; height: 60px; font-size: 1.4rem; }
+    .frame-imagen { width: 180px; height: 113px; }
+}
+header h1 { padding: 0 170px; font-size: 1.25rem; line-height: 1.25; }
+@media (max-width: 700px) { header h1 { padding: 0; font-size: 0.95rem; margin-top: 34px; } header { padding-top: 10px; } .timeline-wrapper { top: 150px; height: calc(100vh - 150px); } }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>BLOQUE 4 · ORGANIZACIÓN NACIONAL Y CAPITALISMO INDUSTRIAL</h1>
+  <p>1853 — 1879 · Deslizá horizontalmente o usá los botones laterales · Tocá los puntos para más información</p>
+</header>
+
+<a href="index.html" class="btn-volver">← Línea de tiempo</a>
+<a href="../../index.html" style="position:fixed;top:15px;right:20px;background:rgba(0,0,0,0.6);color:#d4af37;text-decoration:none;padding:6px 12px;border-radius:20px;font-size:0.8rem;z-index:101;border:1px solid #d4af37;display:inline-flex;align-items:center;gap:6px;">🏠 Ir a página principal</a>
+
+<div class="nav-btn left-btn" id="scrollLeft">❮</div>
+<div class="nav-btn right-btn" id="scrollRight">❯</div>
+
+<div class="timeline-wrapper" id="timelineWrapper">
+  <div class="timeline" id="timeline">
+    <div class="linea-central"></div>
+  </div>
+</div>
+
+<div class="leyenda">
+  <div class="item-leyenda"><div class="cor" style="background:#d4af37"></div>Organización Nacional</div>
+  <div class="item-leyenda"><div class="cor" style="background:#00bfff"></div>Industria y ciencia</div>
+  <div class="item-leyenda"><div class="cor" style="background:#e05050"></div>Movimiento obrero</div>
+  <div class="item-leyenda"><div class="cor" style="background:#66cc66"></div>Expansión europea, guerras y frontera</div>
+</div>
+
+<!-- Modal de evento -->
+<div class="modal" id="modal">
+  <div class="modal-contenido">
+    <h2 id="modalFecha"></h2>
+    <h3 id="modalTitulo"></h3>
+    <p  id="modalTexto"></p>
+    <button class="cerrar" onclick="cerrarModal()">Cerrar</button>
+  </div>
+</div>
+
+<!-- Visor de imagen -->
+<div class="visor-overlay" id="visorOverlay">
+  <div class="visor-contenedor">
+    <img id="visorImg" class="visor-imagen" draggable="false" alt="">
+  </div>
+  <button class="visor-cerrar" id="visorCerrar">✕</button>
+  <div class="visor-caption" id="visorCaption"></div>
+  <div class="visor-info"    id="visorInfo">Escala: 100%</div>
+</div>
+
+<script>
+// ═══════════════════════════════════════════════
+// DATOS
+// ═══════════════════════════════════════════════
+const EVENTOS = [
+ {
+  "fecha": "1853",
+  "titulo": "Constitución Nacional",
+  "tipo": "org",
+  "texto": "El 1 de mayo se sanciona en Santa Fe la Constitución, de forma representativa, republicana y federal. Buenos Aires no participa porque se había separado de la Confederación."
+ },
+ {
+  "fecha": "1856",
+  "titulo": "Procedimiento Bessemer",
+  "tipo": "cie",
+  "texto": "Henry Bessemer desarrolla un método para producir acero en grandes cantidades. Es un avance clave de la Segunda Revolución Industrial."
+ },
+ {
+  "fecha": "1857",
+  "titulo": "Primer ferrocarril argentino",
+  "tipo": "org",
+  "texto": "El 29 de agosto se inaugura el Ferrocarril del Oeste, entre Buenos Aires y Floresta. Es el comienzo de la red ferroviaria del país."
+ },
+ {
+  "fecha": "1857",
+  "titulo": "Rebelión de los cipayos",
+  "tipo": "exp",
+  "texto": "Soldados indios se levantan contra la Compañía Británica de las Indias Orientales. Tras reprimirlos, el gobierno británico toma el control directo de la India."
+ },
+ {
+  "fecha": "1859",
+  "titulo": "Cepeda y Darwin",
+  "tipo": "org",
+  "texto": "En octubre la Confederación vence a Buenos Aires en Cepeda. Ese año Charles Darwin publica El origen de las especies."
+ },
+ {
+  "fecha": "1860",
+  "titulo": "Reforma constitucional",
+  "tipo": "org",
+  "texto": "Buenos Aires se incorpora a la Nación y se modifica la Constitución de 1853."
+ },
+ {
+  "fecha": "1861",
+  "titulo": "Batalla de Pavón",
+  "tipo": "org",
+  "texto": "Buenos Aires, al mando de Mitre, vence a la Confederación. Se reorganiza el país bajo su liderazgo."
+ },
+ {
+  "fecha": "1862",
+  "titulo": "Presidencia de Mitre",
+  "tipo": "org",
+  "texto": "Bartolomé Mitre asume como primer presidente de la Argentina unificada. Comienza el período de las presidencias históricas."
+ },
+ {
+  "fecha": "1862",
+  "titulo": "Intervención francesa en México",
+  "tipo": "exp",
+  "texto": "Napoleón III invade México para imponer como emperador a Maximiliano de Habsburgo. Benito Juárez encabeza la resistencia."
+ },
+ {
+  "fecha": "1863",
+  "titulo": "Colegios nacionales y muerte del Chacho",
+  "tipo": "org",
+  "texto": "Mitre crea el Colegio Nacional de Buenos Aires. En noviembre es asesinado el caudillo Ángel Vicente Peñaloza, el Chacho, jefe de montoneras federales."
+ },
+ {
+  "fecha": "1864",
+  "titulo": "Primera Internacional",
+  "tipo": "obr",
+  "texto": "El 28 de septiembre se funda en Londres la Asociación Internacional de Trabajadores, que reúne a socialistas, anarquistas y sindicalistas."
+ },
+ {
+  "fecha": "1865",
+  "titulo": "Guerra de la Triple Alianza",
+  "tipo": "exp",
+  "texto": "Argentina, Brasil y Uruguay se unen contra Paraguay, gobernado por Francisco Solano López. La guerra dura hasta 1870."
+ },
+ {
+  "fecha": "1867",
+  "titulo": "El capital",
+  "tipo": "obr",
+  "texto": "Karl Marx publica el primer tomo de su análisis del capitalismo."
+ },
+ {
+  "fecha": "1867",
+  "titulo": "Fusilamiento de Maximiliano",
+  "tipo": "exp",
+  "texto": "Las fuerzas de Juárez derrotan al imperio impuesto por Francia, y Maximiliano es fusilado en junio."
+ },
+ {
+  "fecha": "1868",
+  "titulo": "Presidencia de Sarmiento",
+  "tipo": "org",
+  "texto": "Domingo Faustino Sarmiento asume la presidencia y promueve la educación primaria y la creación de escuelas."
+ },
+ {
+  "fecha": "1868",
+  "titulo": "Restauración Meiji",
+  "tipo": "exp",
+  "texto": "Japón inicia una modernización del Estado y de la economía que lo convierte en potencia industrial y militar."
+ },
+ {
+  "fecha": "1869",
+  "titulo": "Código Civil y primer censo",
+  "tipo": "org",
+  "texto": "Se sanciona el Código Civil redactado por Vélez Sarsfield, que deja a la mujer casada bajo la autoridad del marido. Ese año se realiza el primer censo nacional."
+ },
+ {
+  "fecha": "1869",
+  "titulo": "Canal de Suez",
+  "tipo": "exp",
+  "texto": "Se inaugura el canal que acorta la ruta entre Europa y Asia. Gran Bretaña tomará su control."
+ },
+ {
+  "fecha": "1870",
+  "titulo": "Escuelas normales y fin de la guerra del Paraguay",
+  "tipo": "org",
+  "texto": "Se funda en Paraná la primera escuela normal para formar maestros. En marzo termina la guerra de la Triple Alianza, con Paraguay devastado."
+ },
+ {
+  "fecha": "1871",
+  "titulo": "Comuna de París",
+  "tipo": "obr",
+  "texto": "Entre marzo y mayo los trabajadores de París gobiernan la ciudad. Son derrotados por el ejército."
+ },
+ {
+  "fecha": "1873",
+  "titulo": "Muerte de Calfucurá",
+  "tipo": "exp",
+  "texto": "Muere el cacique mapuche que lideraba una confederación indígena en Salinas Grandes. Su hijo Manuel Namuncurá continúa la resistencia."
+ },
+ {
+  "fecha": "1874",
+  "titulo": "Presidencia de Avellaneda",
+  "tipo": "org",
+  "texto": "Nicolás Avellaneda asume la presidencia. Impulsa la inmigración y el avance sobre la frontera."
+ },
+ {
+  "fecha": "1875",
+  "titulo": "Partido Socialdemócrata alemán y Gran Bretaña en Suez",
+  "tipo": "obr",
+  "texto": "En Alemania se funda el Partido Socialdemócrata. Ese año Gran Bretaña compra acciones del canal de Suez."
+ },
+ {
+  "fecha": "1876",
+  "titulo": "Ley de Inmigración, teléfono y zanja de Alsina",
+  "tipo": "org",
+  "texto": "Se sanciona la ley que facilita la llegada de inmigrantes. Graham Bell patenta el teléfono, y comienza la construcción de la zanja de Alsina."
+ },
+ {
+  "fecha": "1878",
+  "titulo": "Ley 947",
+  "tipo": "exp",
+  "texto": "El Congreso autoriza fondos para llevar la frontera al río Negro."
+ },
+ {
+  "fecha": "1879",
+  "titulo": "Conquista del Desierto",
+  "tipo": "exp",
+  "texto": "Julio Argentino Roca conduce la campaña militar que avanza sobre territorios de pueblos indígenas de la Pampa y la Patagonia."
+ },
+ {
+  "fecha": "1879",
+  "titulo": "Guerra del Pacífico",
+  "tipo": "exp",
+  "texto": "Chile se enfrenta a Perú y Bolivia por el salitre. Bolivia pierde su salida al mar."
+ },
+ {
+  "fecha": "1879",
+  "titulo": "Lámpara eléctrica de Edison",
+  "tipo": "cie",
+  "texto": "Thomas Edison perfecciona una lámpara incandescente de uso práctico. La electricidad empieza a difundirse como fuente de energía."
+ }
+];
+
+// ═══════════════════════════════════════════════
+// CONSTRUCCIÓN DE LA LÍNEA DE TIEMPO
+// ═══════════════════════════════════════════════
+const timeline = document.getElementById("timeline");
+const wrapper  = document.getElementById("timelineWrapper");
+
+const startX = 160;
+const step   = 155;
+const offsetLevels = [55, 120, 80, 145]; // escalonado para evitar superposición
+
+// Posición Y de los marcos de imagen (debajo de las leyendas)
+const IMG_TOP = 210;
+
+EVENTOS.forEach((ev, idx) => {
+  const left = startX + idx * step;
+
+  // Contenedor del evento
+  const div = document.createElement("div");
+  div.className = "evento";
+  div.style.left = left + "px";
+
+  // Punto
+  const punto = document.createElement("div");
+  punto.className = `punto ${ev.tipo}`;
+  div.appendChild(punto);
+
+  // Info escalonada
+  const offsetY = offsetLevels[idx % offsetLevels.length];
+  const info = document.createElement("div");
+  info.className = "info";
+  info.style.top = (offsetY + 18) + "px";
+  info.innerHTML = `<div class="fecha">${ev.fecha}</div><div class="titulo">${ev.titulo}</div>`;
+  div.appendChild(info);
+
+  // Línea conectora cyan
+  const conector = document.createElement("div");
+  conector.className = "conector";
+  conector.style.height = (offsetY - 2) + "px";
+  conector.style.background = "rgba(212,175,55,0.45)";
+  div.appendChild(conector);
+
+  // Click → modal
+  div.addEventListener("click", () => abrirModal(ev.fecha, ev.titulo, ev.texto));
+  timeline.appendChild(div);
+
+  // Marco de imagen (si el evento tiene imagen)
+  if (ev.imagen) {
+    const frame = document.createElement("div");
+    frame.className = "frame-imagen";
+    // Centrar el marco respecto al punto
+    frame.style.left  = (left - 120) + "px";
+    frame.style.top   = IMG_TOP + "px";
+
+    const img = document.createElement("img");
+    img.src = ev.imagen;
+    img.alt = ev.imagenCaption;
+    img.onerror = () => { frame.style.display = "none"; };
+    frame.appendChild(img);
+
+    const cap = document.createElement("div");
+    cap.className = "frame-caption";
+    cap.textContent = ev.imagenCaption;
+    frame.appendChild(cap);
+
+    frame.addEventListener("click", () => abrirVisor(ev.imagen, ev.imagenCaption));
+    timeline.appendChild(frame);
+  }
+});
+
+// Ancho total del timeline
+const totalWidth = startX + (EVENTOS.length - 1) * step + 220;
+timeline.style.width    = totalWidth + "px";
+timeline.style.minWidth = totalWidth + "px";
+
+// ═══════════════════════════════════════════════
+// MODAL DE EVENTO
+// ═══════════════════════════════════════════════
+function abrirModal(fecha, titulo, texto) {
+  document.getElementById("modalFecha").innerText  = fecha;
+  document.getElementById("modalTitulo").innerText = titulo;
+  document.getElementById("modalTexto").innerText  = texto;
+  document.getElementById("modal").style.display   = "flex";
+}
+function cerrarModal() {
+  document.getElementById("modal").style.display = "none";
+}
+document.addEventListener("keydown", e => {
+  if (e.key === "Escape") { cerrarModal(); cerrarVisor(); }
+});
+
+// ═══════════════════════════════════════════════
+// VISOR DE IMAGEN (zoom + pan + táctil)
+// ═══════════════════════════════════════════════
+const visorOverlay = document.getElementById("visorOverlay");
+const visorImg     = document.getElementById("visorImg");
+const visorCaption = document.getElementById("visorCaption");
+const visorInfoEl  = document.getElementById("visorInfo");
+const visorCerrar  = document.getElementById("visorCerrar");
+
+let vScale = 1, vTx = 0, vTy = 0;
+let vDragging = false, vStartX, vStartY, vStartTx, vStartTy;
+let vTouchDist = 0, vTouchScaleStart = 1;
+
+function abrirVisor(src, caption) {
+  vScale = 1; vTx = 0; vTy = 0;
+  visorImg.src = src;
+  visorImg.alt = caption;
+  visorCaption.textContent = caption;
+  visorOverlay.classList.add("activo");
+  document.body.style.overflow = "hidden";
+  actualizarVisor();
+}
+function cerrarVisor() {
+  visorOverlay.classList.remove("activo");
+  document.body.style.overflow = "";
+}
+function actualizarVisor() {
+  visorImg.style.transform = `translate(${vTx}px,${vTy}px) scale(${vScale})`;
+  visorInfoEl.textContent  = `Escala: ${Math.round(vScale * 100)}%`;
+}
+
+visorImg.addEventListener("wheel", e => {
+  e.preventDefault();
+  vScale = Math.min(Math.max(vScale + (e.deltaY > 0 ? -0.1 : 0.1), 0.4), 6);
+  actualizarVisor();
+}, { passive: false });
+
+visorImg.addEventListener("mousedown", e => {
+  vDragging = true;
+  vStartX = e.clientX; vStartY = e.clientY;
+  vStartTx = vTx; vStartTy = vTy;
+  visorImg.style.cursor = "grabbing";
+});
+window.addEventListener("mousemove", e => {
+  if (!vDragging) return;
+  vTx = vStartTx + (e.clientX - vStartX);
+  vTy = vStartTy + (e.clientY - vStartY);
+  actualizarVisor();
+});
+window.addEventListener("mouseup", () => {
+  vDragging = false;
+  visorImg.style.cursor = "grab";
+});
+
+visorImg.addEventListener("touchstart", e => {
+  if (e.touches.length === 1) {
+    vDragging = true;
+    vStartX = e.touches[0].clientX; vStartY = e.touches[0].clientY;
+    vStartTx = vTx; vStartTy = vTy;
+  } else if (e.touches.length === 2) {
+    vDragging = false;
+    vTouchDist = Math.hypot(
+      e.touches[0].clientX - e.touches[1].clientX,
+      e.touches[0].clientY - e.touches[1].clientY
+    );
+    vTouchScaleStart = vScale;
+  }
+}, { passive: false });
+
+visorImg.addEventListener("touchmove", e => {
+  e.preventDefault();
+  if (e.touches.length === 1 && vDragging) {
+    vTx = vStartTx + (e.touches[0].clientX - vStartX);
+    vTy = vStartTy + (e.touches[0].clientY - vStartY);
+    actualizarVisor();
+  } else if (e.touches.length === 2) {
+    const nd = Math.hypot(
+      e.touches[0].clientX - e.touches[1].clientX,
+      e.touches[0].clientY - e.touches[1].clientY
+    );
+    vScale = Math.min(Math.max(vTouchScaleStart * (nd / vTouchDist), 0.4), 6);
+    actualizarVisor();
+  }
+}, { passive: false });
+
+visorImg.addEventListener("touchend", () => { vDragging = false; });
+visorCerrar.addEventListener("click", cerrarVisor);
+visorCerrar.addEventListener("mousedown", e => e.stopPropagation());
+visorOverlay.addEventListener("click", e => { if (e.target === visorOverlay) cerrarVisor(); });
+visorImg.addEventListener("dragstart", e => e.preventDefault());
+
+// ═══════════════════════════════════════════════
+// SCROLL Y NAVEGACIÓN
+// ═══════════════════════════════════════════════
+const leftBtn  = document.getElementById("scrollLeft");
+const rightBtn = document.getElementById("scrollRight");
+const SCROLL_STEP = 320;
+const PREV_CRONO  = "cronos3.html";
+const NEXT_CRONO  = "cronos5.html";
+
+leftBtn.addEventListener("click", () => {
+  if (wrapper.scrollLeft <= 20 && PREV_CRONO) {
+    window.location.href = PREV_CRONO;
+  } else {
+    wrapper.scrollLeft -= SCROLL_STEP;
+  }
+});
+rightBtn.addEventListener("click", () => {
+  const atEnd = wrapper.scrollLeft + wrapper.clientWidth >= wrapper.scrollWidth - 20;
+  if (atEnd && NEXT_CRONO) {
+    window.location.href = NEXT_CRONO;
+  } else {
+    wrapper.scrollLeft += SCROLL_STEP;
+  }
+});
+wrapper.addEventListener("scroll", () => {
+  const atStart = wrapper.scrollLeft <= 20;
+  const atEnd = wrapper.scrollLeft + wrapper.clientWidth >= wrapper.scrollWidth - 20;
+  if (PREV_CRONO) {
+    leftBtn.style.background = atStart ? "rgba(212,175,55,0.5)" : "rgba(0,0,0,0.7)";
+    leftBtn.title = atStart ? "← Ir al Bloque 3" : "";
+  }
+  if (NEXT_CRONO) {
+    rightBtn.style.background = atEnd ? "rgba(212,175,55,0.5)" : "rgba(0,0,0,0.7)";
+    rightBtn.title = atEnd ? "Ir al Bloque 5 →" : "";
+  }
+});
+
+// Drag con mouse
+let isDown = false, startXPos, scrollLeftPos;
+wrapper.addEventListener("mousedown", e => {
+  isDown = true;
+  startXPos    = e.pageX - wrapper.offsetLeft;
+  scrollLeftPos = wrapper.scrollLeft;
+});
+wrapper.addEventListener("mouseleave", () => { isDown = false; });
+wrapper.addEventListener("mouseup",    () => { isDown = false; });
+wrapper.addEventListener("mousemove", e => {
+  if (!isDown) return;
+  e.preventDefault();
+  wrapper.scrollLeft = scrollLeftPos - (e.pageX - wrapper.offsetLeft - startXPos) * 1.5;
+});
+
+// Touch drag
+let tStartX, tScrollLeft;
+wrapper.addEventListener("touchstart", e => {
+  tStartX    = e.touches[0].pageX - wrapper.offsetLeft;
+  tScrollLeft = wrapper.scrollLeft;
+}, { passive: true });
+wrapper.addEventListener("touchmove", e => {
+  wrapper.scrollLeft = tScrollLeft - (e.touches[0].pageX - wrapper.offsetLeft - tStartX) * 1.5;
+}, { passive: true });
+</script>
+</body>
+</html>
