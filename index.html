@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PORTAL DE HISTORIA</title>
+<style>
+  html, body { margin: 0; height: 100%; background: #002060; }
+  body { display: flex; align-items: center; justify-content: center; overflow: hidden; }
+  .portal {
+    width: min(100vw, calc(100vh * 16 / 9));
+    aspect-ratio: 16 / 9;
+    background: url("l-p-portal-historia.png") center / 100% 100% no-repeat;
+  }
+  .a1, .a2, .a3, .a4 { position: absolute; width: 50%; height: 51%; display: block; }
+  .a1, .a2 { top: 0; }
+  .a1 { left: 0; }
+  .a2 { left: 50%; }
+  .a3 { left: 0; top: 51%; height: 49%; }
+  .a4 { left: 50%; top: 51%; height: 49%; }
+  .a1:hover, .a1:focus-visible, .a2:hover, .a2:focus-visible, .a3:hover, .a3:focus-visible, .a4:hover, .a4:focus-visible { background-color: rgba(255,255,255,.18); outline: none; }
+  .centro-neutral { position: absolute; left: 35.703125%; top: 34.444444%; width: 29.53125%; height: 34.861111%; z-index: 2; display: block; }
+  .portal { position: relative; }
+  .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+</style>
+</head>
+<body>
+  <main class="portal">
+    <h1 class="sr">PORTAL DE HISTORIA</h1>
+    <a class="a1" href="primer-a%C3%B1o/botonera.html" aria-label="1er Año"></a>
+    <a class="a2" href="segundo-a%C3%B1o/botonera.html" aria-label="2do Año"></a>
+    <a class="a3" href="tercer-a%C3%B1o/botonera.html" aria-label="3er Año"></a>
+    <a class="a4" href="cuarto-a%C3%B1o/botonera.html" aria-label="4to Año"></a>
+    <a class="centro-neutral" href="que-es-el-portal.html" target="_blank" rel="noopener" aria-label="Qué es el Portal de Historia"></a>
+  </main>
+</body>
+</html>
